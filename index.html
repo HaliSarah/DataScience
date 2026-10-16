@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!--
+  Title:       Site Landing Page (domain root)
+  Author:      Hali Sarah Parsons
+  Date:        October 16, 2026
+  Modified By: Claude
+  Description: Simple branded welcome page for the root of the domain, so the
+               portfolio does not have to double as the homepage. Same navy / teal /
+               purple look as the portfolio and the 404 page. Fully self-contained
+               (inline CSS, root-absolute links) so it renders correctly wherever it
+               is hosted. To add a new destination later, copy one <a class="card">
+               block in the links section.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hali Sarah Parsons</title>
+<meta name="description" content="Hali Sarah Parsons: data science graduate turning messy data into insights businesses can act on.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b1535; --navy2:#13214d; --teal:#14b8a6; --purple:#8b5cf6;
+    --ink:#eef2fb; --muted:#b4bfdc; --line:rgba(255,255,255,.12);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    min-height:100vh; display:flex; flex-direction:column;
+    background:var(--navy); color:var(--ink);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif; line-height:1.55;
+  }
+  a{color:inherit}
+  .wrap{max-width:1000px; margin:0 auto; padding:0 16px; width:100%}
+
+  nav{border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; padding-top:16px; padding-bottom:16px}
+  .brand{font-family:"Space Grotesk",sans-serif; font-weight:700; letter-spacing:.06em; text-decoration:none; white-space:nowrap; font-size:1rem}
+  .brand span{color:var(--teal)}
+  nav a.mail{font-size:.92rem; color:var(--muted); text-decoration:none}
+  nav a.mail:hover{color:var(--teal)}
+
+  /* Light top, heavier bottom: the link cards carry the page weight */
+  .hero{padding:56px 0 36px}
+  .eyebrow{font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); font-weight:600; margin:0 0 10px}
+  h1{
+    font-family:"Space Grotesk",sans-serif; font-weight:700; line-height:1.05; margin:0 0 14px;
+    font-size:clamp(2.6rem, 10vw, 5.5rem);
+    background:linear-gradient(90deg,var(--teal),var(--purple));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .lede{color:var(--muted); max-width:620px; margin:0; font-size:1.12rem}
+
+  .links{
+    margin-top:auto; /* pushes the cards toward the bottom of the viewport */
+    background:linear-gradient(180deg,var(--navy) 0%,var(--navy2) 100%);
+    border-top:3px solid var(--teal); padding:34px 0 44px;
+  }
+  .links h2{font-family:"Space Grotesk",sans-serif; font-size:1.15rem; margin:0 0 16px}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px}
+  .card{
+    display:block; text-decoration:none; padding:22px 20px; border-radius:12px;
+    background:rgba(255,255,255,.05); border:1px solid var(--line);
+    transition:transform .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .card:hover,.card:focus-visible{transform:translateY(-3px); border-color:var(--teal); background:rgba(20,184,166,.1); outline:none}
+  .card b{display:block; font-family:"Space Grotesk",sans-serif; font-size:1.15rem; margin-bottom:4px}
+  .card span{color:var(--muted); font-size:.92rem}
+  .card.primary{background:var(--purple); border-color:var(--purple)}
+  .card.primary span{color:#efe9ff}
+  .card.primary:hover{background:#7c4df0; border-color:#a78bfa}
+
+  footer{padding:16px 0; text-align:center; color:var(--muted); font-size:.85rem; background:var(--navy2)}
+  @media (max-width:560px){nav a.mail{display:none}}
+  @media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
+</style>
+</head>
+<body>
+
+<nav aria-label="Primary">
+  <div class="wrap">
+    <a class="brand" href="/">HALI <span>SARAH</span> PARSONS</a>
+    <a class="mail" href="mailto:HaliSarahParsons@gmail.com">HaliSarahParsons@gmail.com</a>
+  </div>
+</nav>
+
+<main>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Welcome</p>
+      <h1>Turning messy data into insights.</h1>
+      <p class="lede">I'm a data science graduate who likes turning messy data into something businesses can act on. Start with my portfolio below.</p>
+    </div>
+  </header>
+</main>
+
+<section class="links" aria-label="Where to go">
+  <div class="wrap">
+    <h2>Where to next</h2>
+    <div class="grid">
+      <a class="card primary" href="/DSPortfolio/"><b>Data Science Portfolio</b><span>Projects, notebooks and write-ups</span></a>
+      <a class="card" href="/DSPortfolio/Content/HaliSarahParsons_Resume.pdf" target="_blank" rel="noopener"><b>Resume</b><span>One page, opens in a new tab</span></a>
+      <a class="card" href="mailto:HaliSarahParsons@gmail.com"><b>Contact</b><span>Send me a note</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">&copy; <span id="yr">2026</span> Hali Sarah Parsons</div>
+</footer>
+
+<script>
+  /* Title: Landing page script. Author: Hali Sarah Parsons. Modified By: Claude.
+     Why only the year: keeps the footer current without a yearly edit. */
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

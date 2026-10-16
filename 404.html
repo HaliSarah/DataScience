@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--
+  Title:       Data Science Portfolio - Custom 404 Page
+  Author:      Hali Sarah Parsons
+  Date:        October 16, 2026
+  Modified By: Claude
+  Description: Branded "page not found" screen for the portfolio. Fully self-contained
+               (inline CSS, root-absolute links) because a 404 is served from whatever
+               broken URL a visitor typed, so relative paths like ../../styles.css
+               would resolve to the wrong place and the page would render unstyled.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Page not found | Hali Sarah Parsons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b1535; --navy2:#13214d; --teal:#14b8a6; --purple:#8b5cf6;
+    --ink:#eef2fb; --muted:#b4bfdc; --line:rgba(255,255,255,.12);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    min-height:100vh; display:flex; flex-direction:column;
+    background:var(--navy); color:var(--ink);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif; line-height:1.55;
+  }
+  a{color:inherit}
+  .wrap{max-width:1000px; margin:0 auto; padding:0 16px; width:100%}
+
+  /* Top bar: name stays on one line, same as the rest of the site */
+  nav{border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; padding-top:16px; padding-bottom:16px}
+  .brand{font-family:"Space Grotesk",sans-serif; font-weight:700; letter-spacing:.06em; text-decoration:none; white-space:nowrap; font-size:1rem}
+  .brand span{color:var(--teal)}
+  .back{font-size:.92rem; color:var(--muted); text-decoration:none}
+  .back:hover{color:var(--teal)}
+
+  /* Short top, heavier bottom: the weight of the page sits in the link cards below */
+  .hero{padding:44px 0 28px}
+  .eyebrow{font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); font-weight:600; margin:0 0 6px}
+  .big{
+    font-family:"Space Grotesk",sans-serif; font-weight:700; line-height:1; margin:0;
+    font-size:clamp(5.5rem, 22vw, 11rem);
+    background:linear-gradient(90deg,var(--teal),var(--purple));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  h1{font-family:"Space Grotesk",sans-serif; font-size:clamp(1.5rem,4.5vw,2.2rem); margin:10px 0 10px}
+  .lede{color:var(--muted); max-width:600px; margin:0 0 20px; font-size:1.05rem}
+
+  /* The "data" joke: a mini terminal showing the request that failed */
+  .log{
+    background:var(--navy2); border:1px solid var(--line); border-left:4px solid var(--purple);
+    border-radius:10px; padding:14px 16px; max-width:640px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.88rem; color:var(--muted);
+    overflow-wrap:anywhere;
+  }
+  .log b{color:var(--teal); font-weight:600}
+  .log .err{color:#ff8fa3; font-weight:600}
+
+  .links{
+    margin-top:auto; /* pushes the cards toward the bottom of the viewport */
+    background:linear-gradient(180deg,var(--navy) 0%,var(--navy2) 100%);
+    border-top:3px solid var(--teal); padding:32px 0 40px;
+  }
+  .links h2{font-family:"Space Grotesk",sans-serif; font-size:1.15rem; margin:0 0 16px}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px}
+  .card{
+    display:block; text-decoration:none; padding:18px; border-radius:12px;
+    background:rgba(255,255,255,.05); border:1px solid var(--line);
+    transition:transform .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .card:hover,.card:focus-visible{transform:translateY(-3px); border-color:var(--teal); background:rgba(20,184,166,.1); outline:none}
+  .card b{display:block; font-family:"Space Grotesk",sans-serif; font-size:1.05rem; margin-bottom:4px}
+  .card span{color:var(--muted); font-size:.9rem}
+  .card.primary{background:var(--purple); border-color:var(--purple)}
+  .card.primary span{color:#efe9ff}
+  .card.primary:hover{background:#7c4df0; border-color:#a78bfa}
+  footer{padding:16px 0; text-align:center; color:var(--muted); font-size:.85rem; background:var(--navy2)}
+  footer a{color:var(--teal)}
+  @media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
+</style>
+</head>
+<body>
+
+<nav aria-label="Primary">
+  <div class="wrap">
+    <a class="brand" href="/DSPortfolio/">HALI <span>SARAH</span> PARSONS</a>
+    <a class="back" href="/DSPortfolio/">&larr; Back to portfolio</a>
+  </div>
+</nav>
+
+<main>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Error &middot; Not found</p>
+      <p class="big" aria-hidden="true">404</p>
+      <h1>This page didn't make it into the dataset.</h1>
+      <p class="lede">The link may be old or mistyped. Nothing to clean up here, but the work you came for is one click away.</p>
+      <div class="log" role="note">
+        <div>GET <b id="path">this page</b></div>
+        <div>&rarr; <span class="err">404 Not Found</span> &middot; 0 rows returned</div>
+      </div>
+    </div>
+  </header>
+</main>
+
+<section class="links" aria-label="Where to go next">
+  <div class="wrap">
+    <h2>Pick up where the data is</h2>
+    <div class="grid">
+      <a class="card primary" href="/DSPortfolio/"><b>Portfolio home</b><span>Start from the top</span></a>
+      <a class="card" href="/DSPortfolio/#projects"><b>Projects</b><span>Storm damage case study and more</span></a>
+      <a class="card" href="/DSPortfolio/#coursework"><b>Coursework</b><span>Notebooks with code and output</span></a>
+      <a class="card" href="/DSPortfolio/Content/HaliSarahParsons_Resume.pdf" target="_blank" rel="noopener"><b>Resume</b><span>One page, opens in a new tab</span></a>
+      <a class="card" href="mailto:HaliSarahParsons@gmail.com"><b>Contact</b><span>Send me a note</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">&copy; <span id="yr">2026</span> Hali Sarah Parsons. Data Science, Bellevue University.</div>
+</footer>
+
+<script>
+  /* Title: 404 page script. Author: Hali Sarah Parsons. Modified By: Claude.
+     Why textContent and not innerHTML: the path comes from whatever URL the visitor
+     typed, so it must be treated as plain text and never parsed as markup. */
+  (function () {
+    var p = document.getElementById('path');
+    if (p && window.location && window.location.pathname) { p.textContent = window.location.pathname; }
+    document.getElementById('yr').textContent = new Date().getFullYear();
+  })();
+</script>
+</body>
+</html>
