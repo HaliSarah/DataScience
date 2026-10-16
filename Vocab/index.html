@@ -1,0 +1,515 @@
+<!--
+  Title:       Data Science Vocabulary Trainer
+  Author:      Hali Sarah Parsons
+  Date:        2026-10-15
+  Modified By: Claude (Anthropic)
+  Description: Study and quiz tool for DSC 450 interview prep. "Study" shows
+               flashcards with the term on the left and the definition on the right.
+               "Take the Quiz" offers Multiple Choice and Advanced (type-the-term)
+               modes, scores each run, and lists missed terms to retry.
+               Branded to match the DSC 450 Interview Practice Test.
+-->
+<title>Data Science Vocabulary</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: single centered column; tabs on top, progress and score weighted toward the bottom of each view. */
+:root {
+  /* Single dark look on purpose: matches the Hali Sarah Parsons portfolio brand (navy, teal, purple). */
+  --bg: #060f1f; --paper: #0a1930; --raise: #10264a; --ink: #e8eef9; --muted: #a9b8d3; --line: #1a3560;
+  --accent: #2dd4bf; --on-accent: #060f1f; --purple: #8b5cf6; --lilac: #b8a2ff;
+  --good: #2dd4bf; --good-bg: #0b3a3a; --bad: #ff9d95; --bad-bg: #401c1a;
+  --display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 860px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 80px; display: flex; flex-direction: column; gap: 18px; }
+.eyebrow { font-family: var(--display); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 6vw, 44px); line-height: 1.05; margin: 0;
+  background: linear-gradient(90deg, var(--accent), var(--lilac)); -webkit-background-clip: text; background-clip: text; color: transparent; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 62ch; }
+.tabs { display: flex; gap: 6px; border-bottom: 2px solid var(--line); position: sticky; top: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 3; padding-top: 6px; }
+.tab { font: 600 15px var(--display); color: var(--muted); background: none; border: 0; border-bottom: 3px solid transparent; margin-bottom: -2px; padding: 10px 14px; cursor: pointer; }
+.tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.sub { display: inline-flex; flex-wrap: wrap; gap: 4px; background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 4px; }
+.sub button { font: 600 14px var(--body); color: var(--muted); background: none; border: 0; border-radius: 999px; padding: 7px 16px; cursor: pointer; }
+.sub button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn { font: 600 14px var(--body); color: var(--ink); background: transparent; border: 1.5px solid var(--line); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+.btn.solid { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+input[type="search"], input[type="text"], select { font: 15px var(--body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 8px; padding: 8px 12px; min-width: 0; }
+input[type="search"] { flex: 1 1 200px; }
+:focus-visible { outline: 3px solid var(--lilac); outline-offset: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 500 13px var(--body); color: var(--muted); background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.chip[aria-pressed="true"] { color: var(--on-accent); background: var(--lilac); border-color: var(--lilac); }
+.count { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+
+/* Flashcards: term column left, definition column right, kept side by side even on phones as requested. */
+.cards { display: flex; flex-direction: column; gap: 10px; }
+.card { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); background: var(--paper); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.card .term { padding: 14px 16px; background: var(--raise); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.card .term b { font: 700 17px/1.25 var(--display); overflow-wrap: anywhere; }
+.abbr { align-self: flex-start; font: 700 12px var(--display); letter-spacing: .06em; color: var(--on-accent); background: var(--accent); border-radius: 5px; padding: 1px 7px; }
+.cat { font-size: 12px; color: var(--lilac); }
+.card .def { padding: 14px 16px; margin: 0; min-width: 0; font-size: 15px; cursor: default; }
+.hideDefs .card .def { cursor: pointer; }
+.hideDefs .card .def:not(.shown) { color: transparent; text-shadow: 0 0 9px rgba(169,184,211,.55); user-select: none; }
+@media (max-width: 480px) { .card .term, .card .def { padding: 12px; } .card .term b { font-size: 15px; } .card .def { font-size: 14px; } }
+
+/* Quiz */
+.panel { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.qnum { font: 600 13px var(--display); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.qdef { margin: 0; font-size: 18px; font-weight: 500; line-height: 1.45; }
+.opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.opt { text-align: left; font: 500 15px/1.35 var(--body); color: var(--ink); background: var(--raise); border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 14px; cursor: pointer; }
+.opt:hover:not(:disabled) { border-color: var(--accent); }
+.opt:disabled { cursor: default; }
+.opt.right { border-color: var(--good); background: var(--good-bg); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+.fill { display: flex; flex-wrap: wrap; gap: 8px; }
+.fill input { flex: 1 1 220px; font-size: 16px; }
+.fb { margin: 0; padding: 10px 12px; border-radius: 10px; font-size: 15px; }
+.fb.ok { background: var(--good-bg); color: var(--good); }
+.fb.no { background: var(--bad-bg); color: var(--bad); }
+.fb b { color: var(--ink); }
+.prog { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.prog i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--purple)); transition: width .3s; }
+.result { background: linear-gradient(135deg, var(--accent), var(--purple)); color: var(--bg); border-radius: 18px; padding: 26px 22px; display: flex; flex-direction: column; gap: 12px; }
+.result .big { font: 700 clamp(56px, 15vw, 92px)/1 var(--display); font-variant-numeric: tabular-nums; }
+.result p { margin: 0; max-width: 56ch; font-weight: 500; }
+.result .btn { color: var(--bg); border-color: var(--bg); }
+.result .btn.solid { background: var(--bg); color: var(--ink); }
+.missed { display: flex; flex-wrap: wrap; gap: 6px; }
+.missed span { background: var(--bg); color: var(--ink); border-radius: 6px; padding: 3px 9px; font-size: 13px; }
+@media (prefers-reduced-motion: reduce) { .prog i { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <span class="eyebrow">Hali Sarah Parsons &middot; DSC 450 &middot; Interview prep</span>
+    <h1>Data Science Vocabulary</h1>
+    <p class="lede">The terms and abbreviations working data scientists use. Study the cards, then test yourself.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-study" aria-selected="true" aria-controls="study" type="button">Study</button>
+    <button class="tab" role="tab" id="tab-quiz" aria-selected="false" aria-controls="quiz" type="button">Take the Quiz</button>
+  </nav>
+
+  <!-- STUDY -->
+  <section id="study" role="tabpanel" aria-labelledby="tab-study" style="display:flex;flex-direction:column;gap:14px">
+    <div class="row">
+      <input type="search" id="search" placeholder="Search terms or abbreviations" aria-label="Search terms">
+      <button class="btn" id="hideBtn" type="button" aria-pressed="false">Hide definitions</button>
+      <button class="btn" id="shuffleBtn" type="button">Shuffle</button>
+    </div>
+    <div class="chips" id="studyCats" aria-label="Filter by category"></div>
+    <span class="count" id="studyCount"></span>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" role="tabpanel" aria-labelledby="tab-quiz" hidden style="display:flex;flex-direction:column;gap:14px">
+    <div class="sub" role="group" aria-label="Quiz mode">
+      <button type="button" id="mode-mc" aria-pressed="true">Multiple Choice</button>
+      <button type="button" id="mode-adv" aria-pressed="false">Advanced</button>
+    </div>
+    <p class="lede" id="modeNote"></p>
+    <div class="row">
+      <label class="count" for="quizCat">Category</label>
+      <select id="quizCat"></select>
+      <label class="count" for="quizLen">Questions</label>
+      <select id="quizLen"><option value="10">10</option><option value="25" selected>25</option><option value="all">All</option></select>
+      <button class="btn solid" id="startBtn" type="button">Start quiz</button>
+    </div>
+    <div id="stage" style="display:flex;flex-direction:column;gap:14px"></div>
+  </section>
+</div>
+
+<script>
+/* Term bank: [term, abbreviation, category, definition, extra accepted answers].
+   Kept as plain data so new terms can be added without touching the quiz logic. */
+const RAW = [
+  // Fundamentals
+  ["Data Science", "", "Fundamentals", "Using statistics, programming, and domain knowledge to extract insight from data and predict what will happen next."],
+  ["Data Analysis", "", "Fundamentals", "Examining past data with queries, summaries, and charts to explain what happened and why."],
+  ["Exploratory Data Analysis", "EDA", "Fundamentals", "The first look at a dataset: summarizing and plotting it to find patterns, outliers, and quality problems before modeling."],
+  ["Data Mining", "", "Fundamentals", "Automated pattern finding in large datasets to discover relationships people would not spot by hand."],
+  ["Cross-Industry Standard Process for Data Mining", "CRISP-DM", "Fundamentals", "A six-phase project framework: business understanding, data understanding, data preparation, modeling, evaluation, deployment."],
+  ["Feature", "", "Fundamentals", "An input variable a model uses to make a prediction, such as age or monthly spend.", ["predictor", "independent variable", "attribute"]],
+  ["Target Variable", "", "Fundamentals", "The outcome a model is trained to predict, such as whether a customer churns.", ["label", "dependent variable", "target", "response variable"]],
+  ["Feature Engineering", "", "Fundamentals", "Creating or transforming input variables, like turning a signup date into 'months as customer', so a model learns better."],
+  ["Structured Data", "", "Fundamentals", "Data organized in rows and columns with a fixed schema, like a spreadsheet or SQL table."],
+  ["Unstructured Data", "", "Fundamentals", "Data without a fixed table format, such as text, images, audio, and video."],
+  ["Key Performance Indicator", "KPI", "Fundamentals", "A measurable value that tracks progress toward a business goal, like monthly revenue or churn rate."],
+  ["Business Intelligence", "BI", "Fundamentals", "Tools and practices that turn business data into reports and dashboards for decision making."],
+  ["Big Data", "", "Fundamentals", "Datasets too large or fast-moving for traditional tools, often described by volume, velocity, and variety."],
+
+  // Statistics
+  ["Mean", "", "Statistics", "The arithmetic average: the sum of values divided by the count. Sensitive to outliers.", ["average"]],
+  ["Median", "", "Statistics", "The middle value when data is sorted. Resistant to outliers, so preferred for skewed data."],
+  ["Standard Deviation", "SD", "Statistics", "How spread out values are around the mean, in the same units as the data.", ["std", "std dev"]],
+  ["Variance", "", "Statistics", "The average squared distance from the mean. The square of the standard deviation."],
+  ["Normal Distribution", "", "Statistics", "The symmetric bell-shaped curve where about 68% of values fall within one standard deviation of the mean.", ["gaussian distribution", "bell curve"]],
+  ["Skewness", "", "Statistics", "How lopsided a distribution is. Right-skewed data has a long tail of high values, like income.", ["skew"]],
+  ["Outlier", "", "Statistics", "A value far from the rest of the data, which may be an error or a rare real event."],
+  ["Interquartile Range", "IQR", "Statistics", "The spread of the middle 50% of data, from the 25th to the 75th percentile. Used to flag outliers."],
+  ["Z-Score", "", "Statistics", "How many standard deviations a value sits above or below the mean.", ["z score", "standard score"]],
+  ["Central Limit Theorem", "CLT", "Statistics", "As sample size grows, the distribution of sample means approaches a normal curve, whatever the original shape."],
+  ["Null Hypothesis", "H0", "Statistics", "The default assumption that there is no effect or no difference, which a test tries to reject.", ["h naught", "h-zero"]],
+  ["Alternative Hypothesis", "H1", "Statistics", "The claim that a real effect or difference exists.", ["ha"]],
+  ["P-Value", "", "Statistics", "The chance of seeing a result this extreme if there were no real effect. Below 0.05 is the usual cutoff for significance.", ["p value"]],
+  ["Significance Level", "", "Statistics", "The threshold, usually 0.05, below which a p-value counts as statistically significant.", ["alpha"]],
+  ["Confidence Interval", "CI", "Statistics", "A range likely to contain the true value, such as 'between 12% and 18% with 95% confidence'."],
+  ["Type I Error", "", "Statistics", "Rejecting a true null hypothesis: concluding an effect exists when it does not.", ["false positive", "type 1 error"]],
+  ["Type II Error", "", "Statistics", "Failing to reject a false null hypothesis: missing an effect that really exists.", ["false negative", "type 2 error"]],
+  ["Correlation", "r", "Statistics", "A number from -1 to 1 measuring how strongly two variables move together in a straight line.", ["correlation coefficient", "pearson correlation"]],
+  ["Confounding Variable", "", "Statistics", "A hidden factor that affects both variables in a relationship, creating a misleading correlation.", ["confounder"]],
+  ["A/B Test", "", "Statistics", "An experiment that randomly splits users between two versions and compares a metric to find which performs better.", ["ab test", "split test", "split testing"]],
+  ["Analysis of Variance", "ANOVA", "Statistics", "A test that checks whether the means of three or more groups differ."],
+  ["Chi-Square Test", "", "Statistics", "A test of whether two categorical variables are related, comparing observed counts to expected counts.", ["chi squared test", "chi square"]],
+  ["T-Test", "", "Statistics", "A test that compares the means of two groups to see if the difference is significant.", ["t test"]],
+  ["Sampling Bias", "", "Statistics", "Error that occurs when the sample does not represent the population, such as surveying only app users."],
+
+  // Data Wrangling
+  ["Data Wrangling", "", "Data Wrangling", "Cleaning, restructuring, and enriching raw data into a usable form.", ["data munging", "data cleaning"]],
+  ["Extract, Transform, Load", "ETL", "Data Wrangling", "A pipeline that pulls data from sources, cleans and reshapes it, then loads it into a destination like a warehouse."],
+  ["Imputation", "", "Data Wrangling", "Filling in missing values with an estimate, such as the median or a model prediction."],
+  ["Missing Completely at Random", "MCAR", "Data Wrangling", "Gaps unrelated to any data, observed or not. Safest case for dropping or simple filling."],
+  ["Missing at Random", "MAR", "Data Wrangling", "Gaps explained by other observed columns, such as older users skipping a field more often."],
+  ["Missing Not at Random", "MNAR", "Data Wrangling", "Gaps tied to the missing value itself, such as high earners skipping an income question."],
+  ["Normalization", "", "Data Wrangling", "Rescaling values to a fixed range, usually 0 to 1, so features are comparable.", ["min-max scaling", "min max scaling"]],
+  ["Standardization", "", "Data Wrangling", "Rescaling values to a mean of 0 and a standard deviation of 1.", ["z-score scaling"]],
+  ["One-Hot Encoding", "", "Data Wrangling", "Turning a categorical column into separate 0/1 columns, one per category.", ["one hot encoding", "dummy variables", "dummy encoding"]],
+  ["Data Leakage", "", "Data Wrangling", "When information from outside the training data, often the test set or the future, sneaks into training and inflates scores.", ["leakage", "target leakage"]],
+  ["Train-Test Split", "", "Data Wrangling", "Dividing data into a training portion the model learns from and a test portion used for an honest evaluation.", ["train test split", "holdout"]],
+  ["Stratified Sampling", "", "Data Wrangling", "Sampling so each subgroup keeps its real-world proportion, such as the same churn rate in train and test.", ["stratification", "stratified split"]],
+  ["Class Imbalance", "", "Data Wrangling", "When one outcome is much rarer than the other, such as 5% churners versus 95% stayers.", ["imbalanced data"]],
+  ["Synthetic Minority Oversampling Technique", "SMOTE", "Data Wrangling", "A method that creates synthetic examples of the rare class to balance training data."],
+  ["Multicollinearity", "", "Data Wrangling", "When input variables are highly correlated with each other, making regression coefficients unstable."],
+  ["Variance Inflation Factor", "VIF", "Data Wrangling", "A score that measures multicollinearity. Values above about 5 to 10 signal a problem."],
+  ["Dimensionality Reduction", "", "Data Wrangling", "Reducing the number of input variables while keeping most of the useful information."],
+  ["Principal Component Analysis", "PCA", "Data Wrangling", "A technique that combines correlated variables into fewer uncorrelated components that capture the most variance."],
+  ["Data Pipeline", "", "Data Wrangling", "An automated series of steps that moves and transforms data from source to destination."],
+
+  // Machine Learning
+  ["Machine Learning", "ML", "Machine Learning", "Algorithms that learn patterns from data to make predictions without being explicitly programmed with rules."],
+  ["Artificial Intelligence", "AI", "Machine Learning", "The broad field of building systems that perform tasks associated with human intelligence."],
+  ["Supervised Learning", "", "Machine Learning", "Learning from labeled examples where the correct answer is known, such as past customers marked churned or not."],
+  ["Unsupervised Learning", "", "Machine Learning", "Finding structure in data with no labels, such as grouping similar customers."],
+  ["Classification", "", "Machine Learning", "Predicting a category, such as churn or no churn, spam or not spam."],
+  ["Regression", "", "Machine Learning", "Predicting a continuous number, such as revenue or electricity demand."],
+  ["Linear Regression", "", "Machine Learning", "A model that predicts a number as a weighted sum of inputs, fitting a straight line through the data.", ["ols", "ordinary least squares"]],
+  ["Logistic Regression", "", "Machine Learning", "A classification model that outputs the probability of a yes/no outcome using an S-shaped curve."],
+  ["Decision Tree", "", "Machine Learning", "A model that splits data with a series of yes/no questions, ending in a prediction. Easy to explain."],
+  ["Random Forest", "", "Machine Learning", "An ensemble of many decision trees trained on random samples, which vote on the final prediction."],
+  ["Gradient Boosting", "", "Machine Learning", "An ensemble that builds trees one after another, each correcting the previous errors. XGBoost is a popular version.", ["xgboost", "gbm", "boosting"]],
+  ["K-Nearest Neighbors", "KNN", "Machine Learning", "A model that predicts by looking at the k most similar examples in the training data.", ["k nearest neighbors", "knearest neighbors"]],
+  ["K-Means Clustering", "", "Machine Learning", "An unsupervised method that groups data into k clusters around their center points.", ["k means", "kmeans"]],
+  ["Support Vector Machine", "SVM", "Machine Learning", "A classifier that finds the boundary separating classes with the widest possible margin."],
+  ["Naive Bayes", "", "Machine Learning", "A fast probabilistic classifier based on Bayes' theorem, common for text and spam filtering."],
+  ["Neural Network", "", "Machine Learning", "A model of layered, connected nodes that learns complex patterns by adjusting connection weights.", ["artificial neural network", "ann"]],
+  ["Deep Learning", "DL", "Machine Learning", "Machine learning with neural networks that have many layers, used for images, speech, and text."],
+  ["Natural Language Processing", "NLP", "Machine Learning", "Techniques that let computers read, interpret, and generate human language."],
+  ["Large Language Model", "LLM", "Machine Learning", "A very large neural network trained on text to understand and generate language."],
+  ["Time Series", "", "Machine Learning", "Data recorded in time order, such as hourly grid demand, where trend and seasonality matter.", ["time series forecasting"]],
+  ["Autoregressive Integrated Moving Average", "ARIMA", "Machine Learning", "A classic forecasting model for time series that uses past values and past errors."],
+  ["Ensemble", "", "Machine Learning", "Combining several models so their joint prediction beats any single one.", ["ensemble learning", "ensemble method"]],
+  ["Overfitting", "", "Machine Learning", "When a model memorizes training data, noise included, and performs poorly on new data."],
+  ["Underfitting", "", "Machine Learning", "When a model is too simple to capture the real pattern and performs poorly on all data."],
+  ["Bias-Variance Tradeoff", "", "Machine Learning", "Simple models miss patterns (high bias), complex models chase noise (high variance). The goal is the balance.", ["bias variance tradeoff"]],
+  ["Regularization", "", "Machine Learning", "Adding a penalty for model complexity to reduce overfitting. L1 (Lasso) and L2 (Ridge) are common types.", ["lasso", "ridge", "l1", "l2"]],
+  ["Hyperparameter", "", "Machine Learning", "A setting chosen before training, such as tree depth or learning rate, rather than learned from data."],
+  ["Hyperparameter Tuning", "", "Machine Learning", "Searching for the best model settings, often with grid search or random search.", ["grid search"]],
+  ["Cross-Validation", "CV", "Machine Learning", "Training and testing on several different splits of the data, such as 5-fold, for a more reliable score.", ["k-fold cross validation", "kfold", "k fold"]],
+  ["Baseline Model", "", "Machine Learning", "A simple reference model, like predicting the most common class, that a real model must beat.", ["baseline"]],
+
+  // Evaluation
+  ["Confusion Matrix", "", "Evaluation", "A table of true positives, false positives, true negatives, and false negatives for a classifier."],
+  ["True Positive", "TP", "Evaluation", "A case the model predicted positive that really was positive, such as a correctly flagged churner."],
+  ["False Positive", "FP", "Evaluation", "A case the model predicted positive that was really negative, such as flagging a loyal customer as a churner."],
+  ["False Negative", "FN", "Evaluation", "A case the model predicted negative that was really positive, such as missing a real churner."],
+  ["Accuracy", "", "Evaluation", "The share of all predictions that were correct. Misleading when classes are imbalanced."],
+  ["Precision", "", "Evaluation", "Of everything the model flagged as positive, the share that truly was positive.", ["positive predictive value", "ppv"]],
+  ["Recall", "", "Evaluation", "Of all real positives, the share the model caught. Prioritized when misses are costly.", ["sensitivity", "true positive rate", "tpr"]],
+  ["Specificity", "", "Evaluation", "Of all real negatives, the share the model correctly left unflagged.", ["true negative rate", "tnr"]],
+  ["F1 Score", "F1", "Evaluation", "The harmonic mean of precision and recall, one number that balances both.", ["f1 score", "f-score", "f measure"]],
+  ["Receiver Operating Characteristic Curve", "ROC", "Evaluation", "A plot of true positive rate against false positive rate across every decision threshold.", ["roc curve"]],
+  ["Area Under the Curve", "AUC", "Evaluation", "A score from 0.5 (random) to 1.0 (perfect) summarizing how well a classifier separates the classes.", ["roc auc", "auc-roc"]],
+  ["Decision Threshold", "", "Evaluation", "The probability cutoff, often 0.5, above which a prediction counts as positive. Tuned to the cost of errors.", ["threshold", "classification threshold"]],
+  ["Mean Absolute Error", "MAE", "Evaluation", "The average size of prediction errors, in the target's units, ignoring direction."],
+  ["Mean Squared Error", "MSE", "Evaluation", "The average of squared prediction errors, which punishes large misses heavily."],
+  ["Root Mean Squared Error", "RMSE", "Evaluation", "The square root of MSE, putting the typical error back into the target's units."],
+  ["Mean Absolute Percentage Error", "MAPE", "Evaluation", "The average error as a percentage of the actual value, easy to explain to stakeholders."],
+  ["R-Squared", "R²", "Evaluation", "The share of variation in the target that the model explains, from 0 to 1.", ["r squared", "r2", "coefficient of determination"]],
+  ["Adjusted R-Squared", "", "Evaluation", "R-squared corrected for the number of inputs, so adding useless variables does not inflate it.", ["adjusted r squared", "adjusted r2"]],
+
+  // Tools & Engineering
+  ["Structured Query Language", "SQL", "Tools & Engineering", "The standard language for querying and managing data in relational databases."],
+  ["Python", "", "Tools & Engineering", "The most widely used programming language in data science, with libraries for analysis and modeling."],
+  ["R", "", "Tools & Engineering", "A programming language built for statistics and data visualization."],
+  ["pandas", "", "Tools & Engineering", "The Python library for loading, cleaning, and analyzing tabular data in DataFrames."],
+  ["NumPy", "", "Tools & Engineering", "The Python library for fast numerical arrays and math operations.", ["numpy"]],
+  ["scikit-learn", "", "Tools & Engineering", "The Python library for classic machine learning: preprocessing, models, and evaluation.", ["sklearn", "scikit learn"]],
+  ["Jupyter Notebook", "", "Tools & Engineering", "An interactive document that mixes live code, output, charts, and Markdown notes.", ["jupyter"]],
+  ["DataFrame", "", "Tools & Engineering", "A table of rows and labeled columns, the core data structure in pandas and R.", ["data frame"]],
+  ["Application Programming Interface", "API", "Tools & Engineering", "A defined way for programs to request data or services from each other."],
+  ["Git", "", "Tools & Engineering", "A version control system that tracks code changes and supports team collaboration, often hosted on GitHub.", ["github"]],
+  ["Comma-Separated Values", "CSV", "Tools & Engineering", "A plain-text file format that stores a table with commas between values."],
+  ["JavaScript Object Notation", "JSON", "Tools & Engineering", "A lightweight text format for nested data, common in APIs."],
+  ["Data Warehouse", "", "Tools & Engineering", "A central store of cleaned, structured data organized for reporting and analysis."],
+  ["Data Lake", "", "Tools & Engineering", "A large store of raw data in its original format, structured or not, kept until needed."],
+  ["Machine Learning Operations", "MLOps", "Tools & Engineering", "Practices for deploying, monitoring, and maintaining models in production."],
+  ["Model Drift", "", "Tools & Engineering", "Declining model performance over time as real-world data changes from the training data.", ["drift", "data drift", "concept drift"]],
+  ["Dashboard", "", "Tools & Engineering", "A visual display of key metrics, often built in Tableau or Power BI, that updates as data changes."],
+
+  // Business & Communication
+  ["Stakeholder", "", "Business & Communication", "Anyone with an interest in a project's results, such as managers, clients, or end users."],
+  ["Return on Investment", "ROI", "Business & Communication", "The gain from a project relative to its cost, used to justify data work to leadership."],
+  ["Customer Lifetime Value", "CLV", "Business & Communication", "The total revenue a business expects from one customer over the whole relationship.", ["ltv", "lifetime value", "clv"]],
+  ["Churn Rate", "", "Business & Communication", "The percentage of customers who stop using a product in a given period.", ["churn", "attrition rate"]],
+  ["Model Interpretability", "", "Business & Communication", "How easily people can understand why a model made a prediction.", ["interpretability", "explainability", "explainable ai", "xai"]],
+  ["SHapley Additive exPlanations", "SHAP", "Business & Communication", "A method that shows how much each input pushed a single prediction up or down."],
+  ["Personally Identifiable Information", "PII", "Business & Communication", "Data that can identify a person, such as name, email, or Social Security number, which must be protected."],
+  ["Data Governance", "", "Business & Communication", "The policies and roles that keep data accurate, secure, and used responsibly."],
+  ["Data Storytelling", "", "Business & Communication", "Presenting findings as a clear narrative with visuals so an audience understands and acts."],
+  ["STAR Method", "STAR", "Business & Communication", "An interview answer structure: Situation, Task, Action, Result."],
+  ["Correlation vs. Causation", "", "Business & Communication", "The principle that two things moving together does not prove one causes the other.", ["correlation does not imply causation", "correlation versus causation"]]
+];
+
+/* Expand rows into objects once; the accepted-answer list is precomputed so grading is a simple lookup. */
+const TERMS = RAW.map(([term, abbr, cat, def, alt = []], id) => ({
+  id, term, abbr, cat, def,
+  accept: [term, abbr, ...alt].filter(Boolean).map(norm)
+}));
+const CATS = [...new Set(TERMS.map((t) => t.cat))];
+
+/* Normalizes typed answers so case, spacing, and punctuation never cost a point. */
+function norm(s) { return s.replace(/²/g, "2").toLowerCase().replace(/[^a-z0-9]/g, ""); }
+
+/* Edit distance lets the Advanced quiz forgive small typos, since spelling is not what is being tested. */
+function lev(a, b) {
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++)
+    for (let j = 1; j <= b.length; j++)
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return d[a.length][b.length];
+}
+
+/* Fisher-Yates shuffle; a sort with Math.random is biased, which would repeat question orders. */
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+
+const $ = (id) => document.getElementById(id);
+/* Element factory that sets text through textContent, so no data string is ever parsed as HTML. */
+function el(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+const label = (t) => t.abbr ? t.term + " (" + t.abbr + ")" : t.term;
+
+/* ---------- Tabs ---------- */
+/* Tab switching also updates the URL hash so a classmate can be sent straight to the quiz with #quiz. */
+function showTab(name) {
+  const quiz = name === "quiz";
+  $("tab-study").setAttribute("aria-selected", String(!quiz));
+  $("tab-quiz").setAttribute("aria-selected", String(quiz));
+  $("study").hidden = quiz;
+  $("quiz").hidden = !quiz;
+  try { history.replaceState(null, "", "#" + name); } catch (e) { /* hash updates can be blocked in some frames; the tab still works */ }
+}
+$("tab-study").onclick = () => showTab("study");
+$("tab-quiz").onclick = () => showTab("quiz");
+
+/* ---------- Study ---------- */
+const study = { cat: "All", q: "", order: TERMS };
+
+/* Category chips are generated from the data, so a new category appears automatically. */
+function buildStudyChips() {
+  const box = $("studyCats");
+  ["All", ...CATS].forEach((c) => {
+    const b = el("button", "chip", c);
+    b.type = "button";
+    b.setAttribute("aria-pressed", String(c === "All"));
+    b.onclick = () => {
+      study.cat = c;
+      box.querySelectorAll(".chip").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      renderCards();
+    };
+    box.append(b);
+  });
+}
+
+/* Re-renders the card list from the current filter, search, and order in one pass. */
+function renderCards() {
+  const q = norm(study.q);
+  const list = study.order.filter((t) =>
+    (study.cat === "All" || t.cat === study.cat) &&
+    (!q || norm(t.term + t.abbr).includes(q) || norm(t.def).includes(q)));
+  $("studyCount").textContent = list.length + " of " + TERMS.length + " terms";
+  $("cards").replaceChildren(...list.map((t) => {
+    const card = el("article", "card");
+    const left = el("div", "term");
+    left.append(el("b", "", t.term));
+    if (t.abbr) left.append(el("span", "abbr", t.abbr));
+    left.append(el("span", "cat", t.cat));
+    const right = el("p", "def", t.def);
+    // Clicking a blurred definition reveals just that one, for self-testing card by card.
+    right.onclick = () => right.classList.toggle("shown");
+    card.append(left, right);
+    return card;
+  }));
+}
+
+$("search").addEventListener("input", (e) => { study.q = e.target.value; renderCards(); });
+$("hideBtn").onclick = () => {
+  const on = $("study").classList.toggle("hideDefs");
+  $("hideBtn").setAttribute("aria-pressed", String(on));
+  $("hideBtn").textContent = on ? "Show definitions" : "Hide definitions";
+  document.querySelectorAll(".def.shown").forEach((d) => d.classList.remove("shown"));
+};
+$("shuffleBtn").onclick = () => { study.order = shuffle(TERMS); renderCards(); };
+
+/* ---------- Quiz ---------- */
+const quiz = { mode: "mc", items: [], i: 0, score: 0, missed: [] };
+const NOTES = {
+  mc: "Read the definition and pick the matching term.",
+  adv: "Read the definition and type the term or its abbreviation. Small typos are forgiven."
+};
+
+/* Switching mode resets the stage, because a half-finished run in the other mode would score incorrectly. */
+function setMode(m) {
+  quiz.mode = m;
+  $("mode-mc").setAttribute("aria-pressed", String(m === "mc"));
+  $("mode-adv").setAttribute("aria-pressed", String(m === "adv"));
+  $("modeNote").textContent = NOTES[m];
+  $("stage").replaceChildren();
+}
+$("mode-mc").onclick = () => setMode("mc");
+$("mode-adv").onclick = () => setMode("adv");
+$("quizCat").replaceChildren(...["All categories", ...CATS].map((c) => { const o = el("option", "", c); o.value = c; return o; }));
+
+/* Starts a run from a given pool; reused by "Retry missed" so missed terms get a focused second pass. */
+function startQuiz(pool) {
+  if (!pool) {
+    const c = $("quizCat").value;
+    pool = TERMS.filter((t) => c === "All categories" || t.cat === c);
+    const n = $("quizLen").value;
+    pool = shuffle(pool).slice(0, n === "all" ? pool.length : Number(n));
+  }
+  Object.assign(quiz, { items: shuffle(pool), i: 0, score: 0, missed: [] });
+  renderQ();
+}
+$("startBtn").onclick = () => startQuiz();
+
+/* Picks three wrong answers, preferring the same category so the choices are genuinely tempting. */
+function distractors(t) {
+  const same = shuffle(TERMS.filter((x) => x.cat === t.cat && x.id !== t.id));
+  const rest = shuffle(TERMS.filter((x) => x.cat !== t.cat));
+  return [...same, ...rest].slice(0, 3);
+}
+
+/* Records one answer and shows feedback; shared by both modes so scoring rules stay identical. */
+function answer(t, ok, note) {
+  if (ok) quiz.score += 1; else quiz.missed.push(t);
+  const fb = el("p", "fb " + (ok ? "ok" : "no"));
+  fb.append(document.createTextNode(ok ? (note || "Correct. ") : "Not quite. Answer: "), el("b", "", label(t)));
+  const next = el("button", "btn solid", quiz.i + 1 < quiz.items.length ? "Next question" : "See results");
+  next.type = "button";
+  next.onclick = () => { quiz.i += 1; quiz.i < quiz.items.length ? renderQ() : renderResult(); };
+  $("qpanel").append(fb, next);
+  next.focus();
+}
+
+/* Draws the current question. Progress sits at the bottom of the panel to keep the layout bottom-heavy. */
+function renderQ() {
+  const t = quiz.items[quiz.i];
+  const panel = el("div", "panel");
+  panel.id = "qpanel";
+  panel.append(el("span", "qnum", "Question " + (quiz.i + 1) + " of " + quiz.items.length + " · " + t.cat), el("p", "qdef", t.def));
+
+  if (quiz.mode === "mc") {
+    const opts = el("div", "opts");
+    shuffle([t, ...distractors(t)]).forEach((o) => {
+      const b = el("button", "opt", label(o));
+      b.type = "button";
+      b.onclick = () => {
+        // Lock every option so the first choice is the one that counts.
+        opts.querySelectorAll("button").forEach((x) => { x.disabled = true; if (x.textContent === label(t)) x.classList.add("right"); });
+        if (o !== t) b.classList.add("wrong");
+        answer(t, o === t);
+      };
+      opts.append(b);
+    });
+    panel.append(opts);
+  } else {
+    const form = el("form", "fill");
+    const input = el("input");
+    input.type = "text"; input.id = "advInput"; input.autocomplete = "off"; input.setAttribute("aria-label", "Your answer");
+    input.placeholder = "Type the term or abbreviation";
+    const hint = el("button", "btn", "Hint");
+    hint.type = "button";
+    // Hint gives the first letter and word count: enough to jog memory without giving the answer away.
+    hint.onclick = () => { input.placeholder = t.term[0] + "… (" + t.term.split(/\s+/).length + " word" + (t.term.split(/\s+/).length > 1 ? "s" : "") + (t.abbr ? ", abbr. " + t.abbr.length + " letters" : "") + ")"; hint.disabled = true; };
+    const go = el("button", "btn solid", "Check");
+    go.type = "submit";
+    form.append(input, hint, go);
+    form.onsubmit = (e) => {
+      e.preventDefault(); // the form is page UI only; there is nowhere to submit to
+      const v = norm(input.value);
+      if (!v) return;
+      const exact = t.accept.includes(v);
+      // Typo tolerance only applies to longer answers, so a wrong two-letter abbreviation is never accepted.
+      const close = !exact && v.length > 5 && t.accept.some((a) => a.length > 5 && lev(v, a) <= 2);
+      input.disabled = hint.disabled = go.disabled = true;
+      answer(t, exact || close, close ? "Correct, check the spelling: " : "Correct. ");
+    };
+    panel.append(form);
+    setTimeout(() => input.focus(), 0);
+  }
+
+  const prog = el("div", "prog");
+  const bar = el("i");
+  bar.style.width = (quiz.i / quiz.items.length) * 100 + "%";
+  prog.append(bar);
+  panel.append(el("span", "count", "Score so far: " + quiz.score + " / " + quiz.i), prog);
+  $("stage").replaceChildren(panel);
+}
+
+/* Final score card with the missed terms, so the next study session has a clear target. */
+function renderResult() {
+  const n = quiz.items.length, pct = Math.round((quiz.score / n) * 100);
+  const box = el("section", "result");
+  box.append(el("span", "eyebrow", (quiz.mode === "mc" ? "Multiple Choice" : "Advanced") + " results"));
+  box.append(el("div", "big", quiz.score + " / " + n));
+  box.append(el("p", "", pct >= 90 ? pct + "%. You speak the language. Try Advanced mode or a bigger set."
+    : pct >= 70 ? pct + "%. Strong base. Review the terms below, then retry them."
+    : pct + "%. Study the terms below in the Study tab, then retry them."));
+  if (quiz.missed.length) {
+    const m = el("div", "missed");
+    quiz.missed.forEach((t) => m.append(el("span", "", label(t))));
+    box.append(m);
+  }
+  const row = el("div", "row");
+  if (quiz.missed.length) {
+    const r = el("button", "btn solid", "Retry missed terms");
+    r.type = "button"; r.onclick = () => startQuiz(quiz.missed.slice());
+    row.append(r);
+  }
+  const again = el("button", "btn", "New quiz");
+  again.type = "button"; again.onclick = () => startQuiz();
+  row.append(again);
+  box.append(row);
+  $("stage").replaceChildren(box);
+}
+
+/* ---------- Boot ---------- */
+buildStudyChips();
+renderCards();
+setMode("mc");
+showTab(location.hash === "#quiz" ? "quiz" : "study");
+</script>
