@@ -195,27 +195,39 @@
       <h2>Milestone 3 walkthrough</h2>
       <p class="lede" style="margin-bottom:24px">The recorded team presentation covers this same project end to end &mdash; business problem, methods, results and conclusion &mdash; in about 12 minutes.</p>
 
-      <div class="slide-strip" aria-label="Presentation slide previews">
-        <figure><img src="slides/slide-title.jpg" alt="Title slide: Predicting Economic Damage from Severe Weather" loading="lazy"><figcaption>Title</figcaption></figure>
-        <figure><img src="slides/slide-research.jpg" alt="Slide: Frequency isn't the same as risk" loading="lazy"><figcaption>Research question</figcaption></figure>
-        <figure><img src="slides/slide-results.jpg" alt="Slide: both models beat the baseline" loading="lazy"><figcaption>Results</figcaption></figure>
-        <figure><img src="slides/slide-conclusion.jpg" alt="Slide: back to the real question" loading="lazy"><figcaption>Conclusion</figcaption></figure>
+      <!-- Why youtube-nocookie.com: same player, but YouTube sets no tracking cookies until the visitor presses play. -->
+      <div class="video-embed" style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#000;margin:0 0 28px">
+        <iframe src="https://www.youtube-nocookie.com/embed/f8zzHB3jpaU"
+                title="Project 1 team presentation: Predicting Economic Damage from Severe Weather"
+                style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin" loading="lazy" allowfullscreen></iframe>
       </div>
 
-      <div class="office-embed">
-        <!-- Renders only once this file is actually live and publicly reachable at the
-             URL below -- Microsoft's viewer fetches the file itself, so this will show
-             a load error on localhost, in a file:// preview, or before the .pptx is
-             uploaded to this folder. The download button underneath always works. -->
-        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https%3A%2F%2Fds.iqproductionz.com%2FPortfolio%2FContent%2FProject1%2FDSC450_Milestone3_Presentation.pptx"
-                title="Project 1 presentation, embedded" allowfullscreen></iframe>
+      <!-- Thumbnails: live in the Slides/ folder (capital S), named Title, Research, Results, Conclusion .jpeg -->
+      <div class="slide-strip" aria-label="Presentation slide previews">
+        <figure><img src="Slides/Title.jpeg" alt="Title slide: Predicting Economic Damage from Severe Weather" loading="lazy"><figcaption>Title</figcaption></figure>
+        <figure><img src="Slides/Research.jpeg" alt="Slide: Frequency isn't the same as risk" loading="lazy"><figcaption>Research question</figcaption></figure>
+        <figure><img src="Slides/Results.jpeg" alt="Slide: both models beat the baseline" loading="lazy"><figcaption>Results</figcaption></figure>
+        <figure><img src="Slides/Conclusion.jpeg" alt="Slide: back to the real question" loading="lazy"><figcaption>Conclusion</figcaption></figure>
       </div>
-      <p class="embed-note">If the embed above doesn't load (it needs this page live on iqproductionz.com with the file already uploaded), use the download link below.</p>
+
+      <!-- Slides viewer: Microsoft's free viewer fetches the .pptx itself, so the file must be
+           uploaded to this folder with exactly this name (names are case-sensitive on the
+           server) and be publicly reachable. It replaces the old slide thumbnails, which
+           depended on four separate .jpg files being uploaded with matching names. -->
+      <h3 style="margin:8px 0 12px">The slides</h3>
+      <div class="slides-embed" style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#13214d;margin:0 0 20px">
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https%3A%2F%2Fds.iqproductionz.com%2FPortfolio%2FContent%2FProject1%2FDSC450_Milestone3_Presentation.pptx"
+                title="Project 1 slides"
+                style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+                loading="lazy" allowfullscreen></iframe>
+      </div>
+      <p class="embed-note">If the slides don't load, use the download button below.</p>
 
       <div class="media-actions">
-        <a class="btn primary" href="DSC450_Milestone3_Presentation.pptx" download>Download presentation (.pptx)</a>
-        <!-- TODO: once the team records the Teams presentation, swap this href for the uploaded video link. -->
-        <a class="btn ghost" href="#">Watch the recording (coming soon)</a>
+        <a class="btn primary" href="DSC450_Milestone3_Presentation.pptx" download>Download the slides (.pptx)</a>
+        <a class="btn ghost" href="https://youtu.be/f8zzHB3jpaU" target="_blank" rel="noopener">Open video on YouTube</a>
       </div>
     </div>
   </section>
@@ -225,14 +237,22 @@
       <p class="eyebrow">Code &amp; Resources</p>
       <h2>Notebooks, data and write-up</h2>
       <div class="links" style="margin-top:20px">
-        <a href="DSC450_Project1_Visualization_HaliSarahParsons.html">Visualization notebook</a>
-        <a href="noaa_storm_download.html">Data download script (Python)</a>
-        <a href="NOAA_data_wrangling.html">Data wrangling notebook</a>
-        <a href="NOAA_Storm_Impact_Modeling.html">Impact modeling notebook</a>
+        <a href="Visuals/">Visualization notebook</a>
+        <a href="Data/">Data download script (Python)</a>
+        <a href="Wrangling/">Data wrangling notebook</a>
+        <a href="Modeling/">Impact modeling notebook</a>
         <a href="ProjectMilestone2.pdf">Full write-up (PDF)</a>
         <a href="DSC450_Milestone3_Presentation.pptx" download>Presentation (.pptx)</a>
         <a href="https://github.com/HaliSarah/DSC-450-Group-1-Collab" target="_blank" rel="noopener">Code on GitHub</a>
       </div>
+      <p class="eyebrow" style="margin-top:34px">Download the files</p>
+      <div class="links" style="margin-top:12px">
+        <a href="Data/noaa_storm_download.py" download>noaa_storm_download.py</a>
+        <a href="Wrangling/NOAA_data_wrangling.ipynb" download>NOAA_data_wrangling.ipynb</a>
+        <a href="Visuals/DSC450_Project1_Visualization_HaliSarahParsons.ipynb" download>DSC450_Project1_Visualization_HaliSarahParsons.ipynb</a>
+        <a href="Modeling/NOAA_Storm_Impact_Modeling.ipynb" download>NOAA_Storm_Impact_Modeling.ipynb</a>
+      </div>
+      <p class="note" style="margin-top:14px;font-size:.9rem;opacity:.8">Group project. The modeling notebook was written by teammate Matthew Scarpello; my part was the visualizations and the presentation.</p>
     </div>
   </section>
 
