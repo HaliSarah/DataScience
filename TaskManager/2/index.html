@@ -3,7 +3,7 @@
   Title:       Forecast Regional Electricity Grid Demand: Team Tracker
   Author:      Hali Sarah Parsons
   Date:        2026-10-11
-  Modified By: Claude (2026-10-14: progress update for models, weather data, and new tasks)
+  Modified By: Claude (2026-10-22: Sarah's completed tasks checked off)
   Description: Shared DSC 450 Project 2 checklist for Group 1. Hosted on GitHub Pages;
                tasks, sign-offs, and due dates save to Cloud Firestore so every
                teammate sees the same live list without a Claude account.
@@ -1163,6 +1163,17 @@ const UPDATES = [{
     "t01": { "options.o2": { label: "Open-Meteo historical weather: hourly temperatures for Houston, Dallas, San Antonio, Austin (second source, merged onto ERCOT)",
       url: "https://open-meteo.com/en/docs/historical-weather-api", order: 2 } },
   },
+}, {
+  key: "u20261022",
+  add: {},
+  // WHY: Sarah's finished work as of Oct 22; sign-off paths touch only her own boxes.
+  update: Object.assign(
+    Object.fromEntries(["t02", "t03", "t05", "t18", "t24", "t26"].map(id =>
+      [id, { done: true, doneBy: "Sarah", doneAt: "2026-10-22T20:56:00-05:00" }])),
+    {
+      t01: { "options.o1.signoffs.Sarah": { done: true, by: "Sarah", at: "2026-10-22T20:56:00-05:00" } },
+      t04: { "signoffs.Sarah": { done: true, by: "Sarah", at: "2026-10-22T20:56:00-05:00" } },
+    }),
 }];
 
 let applying = false;
