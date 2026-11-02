@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <!--
-  Title:       Data Science Portfolio - Project 2 Wireframe
+  Title:       Data Science Portfolio - Project 2 Case Study
   Author:      Hali Sarah Parsons
   Date:        October 8, 2026
   Modified By: Claude
-  Description: Wireframe placeholder for Project 2 (DSC 450, Weeks 6-8):
-               Forecasting Regional Electricity Grid Demand. This satisfies
-               Portfolio Milestone 1's "wireframe of all 4 pages" requirement --
-               same section order and layout as the real Project 1 page, filled
-               with placeholder copy instead of final content. Replace each
-               [bracketed] block with real material as the sprint produces it;
-               the dashed boxes and "In progress" badge are meant to come out
-               once this page is finished, the same way Project 1's did.
-               Saved as index.html so it serves as the landing page at
-               ds.iqproductionz.com/Portfolio/Content/Project2/.
+  Description: Full case-study page for Project 2 (DSC 450, Weeks 6-8):
+               Forecasting Next-Day Hourly Electricity Demand in ERCOT.
+               Replaces the wireframe; same section order and styles as the
+               Project 1 page. Saved as index.html so it serves as the landing
+               page at ds.iqproductionz.com/Portfolio/Content/Project2/.
+               Numbers are transcribed from the team's Milestone 2 report and
+               the project notebooks (Wrangling, Modeling, Visuals) and drawn
+               as plain HTML bars, the same approach Project 1 uses.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Project 2: Forecasting Regional Electricity Grid Demand | Hali Sarah Parsons</title>
-<meta name="description" content="DSC 450 Project 2 (in progress): forecasting hourly electricity grid demand from EIA-930 data.">
+<title>Project 2: Forecasting Electricity Demand in ERCOT | Hali Sarah Parsons</title>
+<meta name="description" content="DSC 450 Project 2 case study: forecasting next-day hourly electricity demand in ERCOT from EIA-930 grid data, calendar patterns and weather.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -48,67 +46,122 @@
 <header class="proj-hero">
   <div class="wrap reveal">
     <div class="tags">
-      <span class="badge progress">In progress</span>
+      <span class="badge live">Live</span>
       <span class="tag">Project 2</span>
       <span class="tag purple">Group project &middot; DSC 450</span>
       <span class="tag">My role: Data Wrangler</span>
     </div>
-    <h1>Forecasting Regional Electricity Grid Demand</h1>
-    <p class="lede">[One or two sentences: the business problem, why it matters, and what the team is testing.] Full case study goes live at the end of Week 8.</p>
+    <h1>Forecasting Next-Day Hourly Electricity Demand in ERCOT</h1>
+    <p class="lede">Grid operators have to schedule power before anyone flips a switch. This project asks how close public historical data &mdash; past demand, calendar patterns and observed temperatures &mdash; can get to the forecast ERCOT itself publishes for the next day.</p>
     <ul class="meta">
-      <li class="chip"><b>Week 8</b> due date</li>
-      <li class="chip">EIA-930 hourly grid data</li>
-      <li class="chip">eia.gov/opendata</li>
+      <li class="chip"><b>41,616</b> hourly records</li>
+      <li class="chip"><b>3.54%</b> MAPE, best team model</li>
+      <li class="chip">EIA-930 data, <b>2022&ndash;2026</b></li>
     </ul>
+    <div class="cta">
+      <a class="btn primary" href="#presentation">Watch the presentation</a>
+      <a class="btn ghost" href="#resources">Code &amp; notebooks</a>
+    </div>
   </div>
 </header>
 
 <main id="main">
 
-  <div class="wrap">
-    <div class="wire-note reveal">This page is a wireframe for Portfolio Milestone 1 &mdash; it mirrors Project 1's layout so the final write-up can drop straight in once Project 2's sprint (Weeks 6&ndash;8) is finished.</div>
-  </div>
-
   <section class="proj-section tone-a">
-    <div class="wrap reveal">
-      <p class="eyebrow">Business Problem</p>
-      <h2>[Section title: the problem in plain language]</h2>
-      <div class="placeholder" style="min-height:160px">
-        <h3>[Business problem / hypothesis]</h3>
-        <p>[Why grid demand forecasting matters, and what question this project answers.]</p>
+    <div class="wrap split reveal">
+      <div>
+        <p class="eyebrow">Business Problem</p>
+        <h2>Schedule first, consume later</h2>
+        <p>Accurate short-term demand forecasts matter because generation schedules, energy purchases and reserve decisions are set before the electricity is used. Over-forecast and the grid commits power it doesn't need; under-forecast and it leans on short-notice market adjustments. The February 2021 Texas crisis showed how costly a stressed grid can be, though outages can't be blamed on forecasts alone.</p>
+        <p>ERCOT is a useful test case because EIA reports both realized hourly demand <em>and</em> ERCOT's own day-ahead forecast, so every model can be scored against an independent operational benchmark, not just a simple baseline.</p>
+        <p style="margin-top:22px"><strong>Research question:</strong> Can historical demand, calendar patterns and selected weather variables forecast ERCOT's next-day hourly demand with accuracy approaching the operator's published forecast?</p>
       </div>
+      <aside class="facts" aria-label="Project facts">
+        <dl>
+          <div><dt>Data source</dt><dd>U.S. Energy Information Administration, Form EIA-930 (hourly ERCOT grid data); Open-Meteo weather archive</dd></div>
+          <div><dt>Study period</dt><dd>January 2022 &ndash; September 2026</dd></div>
+          <div><dt>Target</dt><dd>Hourly demand in megawatthours (MWh)</dd></div>
+          <div><dt>Test window</dt><dd>October 2025 &ndash; September 2026 (8,760 hours)</dd></div>
+          <div><dt>Benchmark</dt><dd>ERCOT's published day-ahead forecast</dd></div>
+        </dl>
+      </aside>
     </div>
   </section>
 
   <section class="proj-section tone-b">
     <div class="wrap reveal">
+      <p class="eyebrow">Hypothesis</p>
+      <h2>What we expected going in</h2>
+      <p class="lede">Models that capture recurring time patterns &mdash; hour of day, weekday, season, and demand at the same hour yesterday and last week &mdash; should clearly beat a baseline that simply repeats the same hour from the previous week. Weather was added as a second test: does temperature give the models anything extra?</p>
+    </div>
+  </section>
+
+  <section class="proj-section tone-a">
+    <div class="wrap reveal">
       <p class="eyebrow">Methods</p>
-      <h2>[Section title: data &amp; approach]</h2>
-      <div class="stats" style="grid-template-columns:repeat(4,1fr);margin-top:28px">
-        <div class="stat"><b>[ ]</b><span>[records analyzed]</span></div>
-        <div class="stat"><b>[ ]</b><span>[features / predictors]</span></div>
-        <div class="stat"><b>[ ]</b><span>[target variable]</span></div>
-        <div class="stat"><b>[ ]</b><span>[model(s) used]</span></div>
+      <h2>From raw grid data to a forecasting table</h2>
+      <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-top:28px">
+        <div class="stat"><b>41,616</b><span>consecutive hourly records, Jan 2022 &ndash; Sep 2026</span></div>
+        <div class="stat"><b>19</b><span>columns after cleaning and feature engineering</span></div>
+        <div class="stat"><b>0</b><span>missing, duplicate or impossible demand values</span></div>
+        <div class="stat"><b>8</b><span>forecast series compared, ERCOT included</span></div>
       </div>
-      <div class="placeholder" style="min-height:120px;margin-top:26px">
-        <p>[Data source, cleaning steps, feature engineering, train/test split approach.]</p>
+      <div class="callout-grid" style="margin-top:28px">
+        <div class="callout">
+          <h3>My part: data wrangling</h3>
+          <p>I pulled the hourly series from the EIA API, checked it for duplicates, missing hours and impossible values, and kept a cleaning log. The demand series arrived complete, so no value was changed or filled. I then built the calendar features and the 24- and 168-hour demand lags, and merged on temperatures from Houston, Dallas&ndash;Fort Worth, San Antonio and Austin, population-weighted into one Texas temperature with heating and cooling indicators.</p>
+        </div>
+        <div class="callout">
+          <h3>Two decisions worth noting</h3>
+          <p><strong>UTC timestamps</strong> keep every hour unique through daylight-saving changes, while calendar features use Central time because demand follows the local clock. <strong>No lag shorter than 24 hours</strong> is used, since a day-ahead forecast can't know the most recent day. A spike rule that flagged two real overnight lows was loosened rather than deleting them.</p>
+        </div>
+      </div>
+      <p style="margin-top:26px"><strong>Models:</strong> a seasonal-naive baseline (same hour last week), rolling 24-hour SARIMA and weather-enhanced SARIMAX, Prophet, XGBoost with and without weather, and a 50/50 hybrid of rolling SARIMA and weather XGBoost. All were tested on a chronological holdout, and scored on 8,640 hours shared with ERCOT (120 hours of ERCOT's forecast were unavailable and not filled in).</p>
+    </div>
+  </section>
+
+  <section class="proj-section tone-b">
+    <div class="wrap split reveal">
+      <div class="chart-card chart" role="group" aria-label="Mean absolute error by model: ERCOT 1,135; hybrid 2,006; weather XGBoost 2,477; XGBoost 2,647; rolling SARIMA 2,662; weather SARIMAX 2,730; seasonal naive 4,205; Prophet 4,846">
+        <h4>Averaged over the year, the hybrid led the team</h4>
+        <small>Mean absolute error in MWh over 8,640 shared test hours, lower is better</small>
+        <div class="bar-row"><span>ERCOT day-ahead</span><div class="bar-track"><div class="bar c-purple" style="--w:23.4%">1,135</div></div></div>
+        <div class="bar-row"><span>50/50 Hybrid</span><div class="bar-track"><div class="bar c-teal" style="--w:41.4%">2,006</div></div></div>
+        <div class="bar-row"><span>Weather XGBoost</span><div class="bar-track"><div class="bar c-muted" style="--w:51.1%">2,477</div></div></div>
+        <div class="bar-row"><span>XGBoost</span><div class="bar-track"><div class="bar c-muted" style="--w:54.6%">2,647</div></div></div>
+        <div class="bar-row"><span>Rolling SARIMA</span><div class="bar-track"><div class="bar c-muted" style="--w:54.9%">2,662</div></div></div>
+        <div class="bar-row"><span>Weather SARIMAX</span><div class="bar-track"><div class="bar c-muted" style="--w:56.3%">2,730</div></div></div>
+        <div class="bar-row"><span>Seasonal naive</span><div class="bar-track"><div class="bar c-muted" style="--w:86.8%">4,205</div></div></div>
+        <div class="bar-row"><span>Prophet</span><div class="bar-track"><div class="bar c-muted" style="--w:100%">4,846</div></div></div>
+        <p class="takeaway"><strong>What this shows:</strong> the hybrid cut error by about <strong>52%</strong> against the seasonal-naive baseline and weather XGBoost by about 41%. No team model matched ERCOT, which has weather forecasts and operational data that public history doesn't contain.</p>
+      </div>
+      <div>
+        <p class="eyebrow">Results</p>
+        <h2>Beat the baseline, not the operator</h2>
+        <p>The hypothesis held: history and calendar patterns clearly outperform repeating last week. The 50/50 hybrid of rolling SARIMA and weather-enhanced XGBoost was the strongest team model overall, at roughly 2,006 MWh average error (3.54% MAPE) against ERCOT's 1,135 MWh (2.00%).</p>
+        <p>Weather didn't help everywhere. It improved XGBoost, but the weather-enhanced SARIMAX did slightly worse than plain rolling SARIMA &mdash; the value of weather depends on the model.</p>
       </div>
     </div>
   </section>
 
   <section class="proj-section tone-a">
-    <div class="wrap split reveal">
-      <div class="chart-card chart placeholder" style="min-height:260px" aria-hidden="true">
-        <h4>[Chart: key result #1]</h4>
-        <small>[axis / units]</small>
-        <div class="bar-row"><span>[label]</span><div class="bar-track"><div class="bar c-teal" style="--w:70%">[value]</div></div></div>
-        <div class="bar-row"><span>[label]</span><div class="bar-track"><div class="bar c-purple" style="--w:45%">[value]</div></div></div>
-        <div class="bar-row"><span>[label]</span><div class="bar-track"><div class="bar c-muted" style="--w:20%">[value]</div></div></div>
+    <div class="wrap split reverse reveal">
+      <div class="chart-card chart" role="group" aria-label="Mean absolute error in the top 1% of demand hours: ERCOT 1,158; weather SARIMAX 1,176; rolling SARIMA 1,242; hybrid 3,189; weather XGBoost 6,421; XGBoost 8,019">
+        <h4>When demand peaked, the ranking flipped</h4>
+        <small>Mean absolute error in MWh across the 88 highest-demand hours (87,966 MWh or more)</small>
+        <div class="bar-row"><span>ERCOT day-ahead</span><div class="bar-track-flex"><div class="bar-track"><div class="bar c-purple" style="--w:14.4%"></div></div><span class="val-out">1,158</span></div></div>
+        <div class="bar-row"><span>Weather SARIMAX</span><div class="bar-track-flex"><div class="bar-track"><div class="bar c-teal" style="--w:14.7%"></div></div><span class="val-out">1,176</span></div></div>
+        <div class="bar-row"><span>Rolling SARIMA</span><div class="bar-track-flex"><div class="bar-track"><div class="bar c-teal" style="--w:15.5%"></div></div><span class="val-out">1,242</span></div></div>
+        <div class="bar-row"><span>50/50 Hybrid</span><div class="bar-track"><div class="bar c-muted" style="--w:39.8%">3,189</div></div></div>
+        <div class="bar-row"><span>Weather XGBoost</span><div class="bar-track"><div class="bar c-muted" style="--w:80.1%">6,421</div></div></div>
+        <div class="bar-row"><span>XGBoost</span><div class="bar-track"><div class="bar c-muted" style="--w:100%">8,019</div></div></div>
+        <p class="takeaway"><strong>Why:</strong> both XGBoost models under-forecast every one of these hours. Tree models can't predict beyond the demand levels they saw in training, and test-year peaks exceeded most training-year demand as Texas load grew. SARIMA updates with observed demand each day.</p>
       </div>
       <div>
-        <p class="eyebrow">Results</p>
-        <h2>[Section title: what the model found]</h2>
-        <p>[Model performance summary and the single most important takeaway, in plain language.]</p>
+        <p class="eyebrow">The Bigger Finding</p>
+        <h2>Average accuracy hid the weakness that matters</h2>
+        <p>The model that looked best across the year was not the one to trust during the hours operators worry about most. In the top 1% of demand hours, rolling SARIMA and weather SARIMAX came within roughly 100 MWh of ERCOT, while the hybrid&rsquo;s error was more than two and a half times larger.</p>
+        <p>These peak hours were identified after the fact, so the result diagnoses a historical weakness; it doesn't predict which future hours will be extreme.</p>
       </div>
     </div>
   </section>
@@ -118,13 +171,21 @@
       <p class="eyebrow">Recommendations &amp; Ethical Considerations</p>
       <h2>Who this affects &mdash; and where it could go wrong</h2>
       <div class="callout-grid">
-        <div class="callout placeholder" style="min-height:140px">
+        <div class="callout">
           <h3>Stakeholder impact</h3>
-          <p>[Who uses this, and what's the risk if they over-rely on it?]</p>
+          <p>Grid operators and utilities could use an independent check on demand forecasts. Households and businesses are affected indirectly: under-forecasting peak demand can contribute to shortages and price spikes, which fall hardest on people relying on medical equipment or air conditioning during heat waves.</p>
         </div>
-        <div class="callout placeholder" style="min-height:140px">
+        <div class="callout">
           <h3>Data assumptions &amp; bias</h3>
-          <p>[What does the model assume about the data, and where could that go wrong?]</p>
+          <p>The models assume past patterns continue, which rapid load growth breaks. Observed temperatures also assume perfect weather knowledge, overstating what a real forecast could achieve. The data is public, aggregated to the whole grid, and identifies no customers.</p>
+        </div>
+        <div class="callout">
+          <h3>Misuse risk</h3>
+          <p>A single accuracy number could be read as proof a model is ready for operations, when it did worst in the hours that matter most. Results shouldn't be applied to other grids without retraining, or presented as real-time performance.</p>
+        </div>
+        <div class="callout">
+          <h3>Recommendations</h3>
+          <p>Choose models on overall accuracy <em>and</em> demand conditions. Report peak-hour error and bias next to the average. Future versions should use advance weather forecasts and a fixed issue time, and any model should support operator judgment, not replace it.</p>
         </div>
       </div>
     </div>
@@ -133,20 +194,38 @@
   <section class="proj-section tone-a">
     <div class="wrap reveal">
       <p class="eyebrow">Conclusion</p>
-      <h2>[Section title: back to the business problem]</h2>
-      <div class="placeholder" style="min-height:140px">
-        <p>[Ties the result back to the original business problem, plus next steps.]</p>
+      <h2>Back to the real question</h2>
+      <p class="lede" style="margin-bottom:24px">History and the calendar get surprisingly far: a hybrid built only from public data cut the baseline's error by about half. But ERCOT's forecast stayed well ahead, and the most useful result wasn't the leaderboard &mdash; it was that a strong yearly average can conceal peak-hour weakness.</p>
+      <div class="takeaway-banner">A good average isn't the same as a reliable forecast &mdash; <em>especially</em> when demand is highest.</div>
+      <p style="margin-top:24px"><strong>Limits and next steps:</strong> models were scored on the same hours but not under identical conditions (issue times and inputs differ, and observed weather isn't an advance forecast). Next: standardize issue times, use only advance-available inputs, and test model weights that adapt to conditions known at forecast time.</p>
+    </div>
+  </section>
+
+  <section class="proj-section tone-b" id="presentation">
+    <div class="wrap reveal">
+      <p class="eyebrow">Presentation</p>
+      <h2>Milestone 3 walkthrough</h2>
+      <p class="lede" style="margin-bottom:24px">The recorded team presentation covers the project end to end in about 19 minutes. It and an interactive research explorer live on the team site built by Matthew Scarpello, our data visualizer and presenter.</p>
+      <div class="media-actions">
+        <a class="btn primary" href="https://mjscarpello.github.io/DSC450-ERCOT-Presentation/#presentation" target="_blank" rel="noopener">Watch the presentation</a>
+        <a class="btn ghost" href="https://mjscarpello.github.io/DSC450-ERCOT-Presentation/ERCOT%20project%20context%20web/explorer.html" target="_blank" rel="noopener">Open the research explorer</a>
       </div>
     </div>
   </section>
 
-  <section class="proj-section tone-b">
+  <section class="proj-section tone-a" id="resources">
     <div class="wrap reveal">
-      <p class="eyebrow">Presentation &amp; Resources</p>
-      <h2>[Notebooks, write-up, recorded presentation]</h2>
-      <div class="placeholder" style="min-height:120px">
-        <p>Links to the notebook(s), PDF write-up, Milestone 3 slide deck and recording will go here, matching Project 1's layout.</p>
+      <p class="eyebrow">Code &amp; Resources</p>
+      <h2>Notebooks, data and write-up</h2>
+      <div class="links" style="margin-top:20px">
+        <a href="Data/">Data pull &amp; weather merge notebooks</a>
+        <a href="Wrangling/">Data wrangling notebook</a>
+        <a href="Modeling/">Forecast modeling notebook</a>
+        <a href="Visuals/">Visualization notebook</a>
+        <a href="Milestone_2_ERCOT_Hybrid_Updated.pdf">Final report (PDF)</a>
+        <a href="ERCOT.proj2_WEBSITE_FINAL_REPORT.pdf">Project website companion report (PDF)</a>
       </div>
+      <p class="embed-note" style="margin-top:18px">Team: Hali Sarah Parsons (data wrangling), Andrea Barfield (forecasting models), Matthew Scarpello (visualization and presentation).</p>
     </div>
   </section>
 
@@ -160,7 +239,8 @@
 </footer>
 
 <script>
-  /* Title: Project page interactions. Author: Hali Sarah Parsons. Modified By: Claude. */
+  /* Title: Project page interactions. Author: Hali Sarah Parsons. Modified By: Claude.
+     Why this mirrors the home page's script: same .reveal/.js convention. */
   (function () {
     document.documentElement.classList.add('js');
     document.getElementById('yr').textContent = new Date().getFullYear();
