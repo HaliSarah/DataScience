@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<!--
+  Title:       Data Science Portfolio - Teen Depression Risk App Case Study
+  Author:      Hali Sarah Parsons
+  Date:        November 10, 2026
+  Modified By: Claude
+  Description: Case-study page for the DSC 355 Milestone 5 final project: a
+               Random Forest model on the 2021 National Survey of Children's
+               Health, deployed as a Streamlit app. Saved as index.html so it
+               serves at ds.iqproductionz.com/Portfolio/Content/TeenDepression/.
+               Shares styles.css (two levels up) with the other project pages.
+               Every number below comes from the Milestone 5 write-up and
+               app_week11.py; the 'always predict no' baseline is simple
+               arithmetic on the 78% / 22% class split from that write-up.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teen Depression Risk Prediction: A Deployed ML App | Hali Sarah Parsons</title>
+<meta name="description" content="DSC 355 final project: a Random Forest trained on 15,787 teens from the 2021 National Survey of Children's Health, deployed as a Streamlit app.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="top" aria-label="Primary">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">HALI <span>SARAH</span> PARSONS</a>
+    <ul>
+      <li><a href="../../index.html">Home</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#contact">Contact</a></li>
+      <li><a class="btn-nav" href="https://ds.iqproductionz.com/Portfolio/Content/HaliSarahParsons_Resume.pdf" target="_blank" rel="noopener">Resume</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="crumb">
+  <div class="wrap"><a href="../../index.html#projects">&larr; Back to all projects</a></div>
+</div>
+
+<header class="proj-hero">
+  <div class="wrap reveal">
+    <div class="tags">
+      <span class="badge live">Live</span>
+      <span class="tag">DSC 355 &middot; Milestone 5</span>
+      <span class="tag purple">Deployed app</span>
+      <span class="tag">Data to Streamlit</span>
+    </div>
+    <h1>Predicting Teen Depression Diagnosis, and Putting the Model in an App</h1>
+    <p class="lede">A model that only lives in a notebook helps no one. This project takes national survey data on 15,787 teens, builds a classifier for whether a teen has been diagnosed with depression, and deploys it as an interactive Streamlit app that a counselor or researcher could use as one signal among many.</p>
+    <ul class="meta">
+      <li class="chip"><b>15,787</b> teens, ages 12&ndash;17</li>
+      <li class="chip"><b>0.853</b> ROC-AUC</li>
+      <li class="chip">NSCH <b>2021</b> survey</li>
+    </ul>
+    <div class="cta">
+      <a class="btn primary" href="#app">Run the app</a>
+      <a class="btn ghost" href="#results">See the results</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="proj-section tone-a">
+    <div class="wrap split reveal">
+      <div>
+        <p class="eyebrow">Business Problem</p>
+        <h2>An early signal, never a verdict</h2>
+        <p>Teen depression is common and often goes unnoticed until it is serious. A school counselor, public health researcher or policy analyst may want a quick, consistent read on which combinations of sleep, screen time, emotional well-being, social stress and health history tend to go along with a depression diagnosis.</p>
+        <p>The goal was a tool that turns a trained model into something a non-programmer can use, with clear limits stated up front: it is a research and education tool, not a diagnostic instrument.</p>
+        <p style="margin-top:22px"><strong>Research question:</strong> Can survey-style information about a teen&rsquo;s lifestyle, emotional well-being, demographics and health history predict whether they have been diagnosed with depression?</p>
+      </div>
+      <aside class="facts" aria-label="Project facts">
+        <dl>
+          <div><dt>Data source</dt><dd>2021 National Survey of Children&rsquo;s Health (NSCH), teens aged 12&ndash;17</dd></div>
+          <div><dt>Records</dt><dd>15,787 teens</dd></div>
+          <div><dt>Target</dt><dd>Depression diagnosis (survey item K2Q33A), recoded to yes / no</dd></div>
+          <div><dt>Predictors</dt><dd>18 survey features in four groups: lifestyle, emotional well-being, demographics, health and social history</dd></div>
+          <div><dt>Model</dt><dd>Random Forest, deployed with Streamlit</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <section class="proj-section tone-b">
+    <div class="wrap reveal">
+      <p class="eyebrow">Methods</p>
+      <h2>Five milestones, one pipeline</h2>
+      <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-top:28px">
+        <div class="stat"><b>15,787</b><span>teen records after filtering to ages 12&ndash;17</span></div>
+        <div class="stat"><b>18</b><span>features across four domains</span></div>
+        <div class="stat"><b>78 / 22</b><span>percent not diagnosed vs. diagnosed</span></div>
+        <div class="stat"><b>80 / 20</b><span>train / test split, stratified</span></div>
+      </div>
+      <div class="callout-grid" style="margin-top:28px">
+        <div class="callout">
+          <h3>Cleaning survey data</h3>
+          <p>The target arrived coded 1 / 2 and was recoded to 1 / 0. Survey sentinel codes (90, 95, 99, meaning &ldquo;not applicable&rdquo;) hiding inside the 1&ndash;4 rating columns were turned into missing values and filled with column medians, instead of being treated as real answers.</p>
+        </div>
+        <div class="callout">
+          <h3>Handling class imbalance</h3>
+          <p>Only about 22% of teens carry a diagnosis, so accuracy flatters any model that leans toward &ldquo;no.&rdquo; Balanced class weights are a trade-off, not a free win: in a side-by-side rerun, recall on diagnosed teens rose from 0.51 to 0.67 while precision fell from 0.82 to 0.59 (accuracy 86.8% to 82.8%, ROC-AUC unchanged). I kept the balanced version because missing a diagnosed teen costs more than a false alarm in a screening signal.</p>
+        </div>
+        <div class="callout">
+          <h3>Choosing the model</h3>
+          <p>Random Forest was compared with logistic regression and a single decision tree. It handles the mix of ordinal and categorical survey features without scaling, can capture interactions like anxiety plus poor sleep, and gives feature importances stakeholders can read. On the final 18 features, logistic regression scores about the same, so the extra complexity buys little accuracy. Final settings: 200 trees, max depth 10, at least 5 samples per leaf.</p>
+        </div>
+        <div class="callout">
+          <h3>Deploying it</h3>
+          <p>The model is wrapped in a Streamlit app that trains once per session (cached), encodes inputs exactly as the training data was encoded, and returns a prediction, both class probabilities, a risk bar and the model-wide feature importances. Testing the deployed app showed its inputs weren&rsquo;t reaching the model correctly, which was fixed and re-verified (see The App).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="proj-section tone-a" id="results">
+    <div class="wrap split reveal">
+      <div class="chart-card chart" role="group" aria-label="ROC-AUC on held-out test data: Random Forest 0.853, Logistic Regression 0.854">
+        <h4>A simple model matched the Random Forest</h4>
+        <small>ROC-AUC on the 20% test split, final 18 features, higher is better</small>
+        <div class="bar-row"><span>Logistic Regression</span><div class="bar-track"><div class="bar c-muted" style="--w:100%">0.854</div></div></div>
+        <div class="bar-row"><span>Random Forest</span><div class="bar-track"><div class="bar c-teal" style="--w:99.9%">0.853</div></div></div>
+        <p class="takeaway"><strong>Test accuracy was 82.8%.</strong> Because 78% of teens are not diagnosed, always answering &ldquo;no&rdquo; would already score about 78%. The Random Forest finds 67% of diagnosed teens (recall) with 59% precision, so ROC-AUC and recall are the numbers that show it learned something.</p>
+      </div>
+      <div>
+        <p class="eyebrow">Results</p>
+        <h2>It learned something real, and I checked what it hid</h2>
+        <p>On teens it had never seen, the final Random Forest reached an ROC-AUC of <strong>0.853</strong> and 82.8% accuracy. Rerunning the comparison on the final features showed logistic regression doing just as well, a useful reminder that a more complex model isn&rsquo;t automatically a better one.</p>
+        <p>The habit this project built: report the metric that matches the problem, and say plainly what the headline number hides.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="proj-section tone-b">
+    <div class="wrap split reverse reveal">
+      <div class="chart-card chart" role="group" aria-label="Share of the model's decisions by feature: anxiety diagnosis 46.0 percent, all 17 other features combined 54.0 percent">
+        <h4>One feature carried almost half the model</h4>
+        <small>Share of Random Forest feature importance</small>
+        <div class="bar-row"><span>Anxiety diagnosis</span><div class="bar-track"><div class="bar c-teal" style="--w:85.2%">46.0%</div></div></div>
+        <div class="bar-row"><span>All 17 other features</span><div class="bar-track"><div class="bar c-muted" style="--w:100%">54.0%</div></div></div>
+        <p class="takeaway"><strong>Why it matters:</strong> anxiety and depression are highly comorbid in adolescents. A tool that treats them as separate risks misses how connected teen mental health is, and a model leaning this hard on one diagnosis should be read with that in mind.</p>
+      </div>
+      <div>
+        <p class="eyebrow">The Bigger Finding</p>
+        <h2>What the model leans on matters as much as its score</h2>
+        <p>The anxiety diagnosis (survey item K2Q32A) accounted for about <strong>46%</strong> of the model&rsquo;s decisions, well ahead of bullying (14%) and ADHD diagnosis (14%). That fits a well-known clinical pattern, and it is also a caution: the model is partly reading one diagnosis to predict another.</p>
+        <p>Importances are model-wide, not specific to one teen. For individual-level explanations, the next step is SHAP values.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="proj-section tone-a">
+    <div class="wrap reveal">
+      <p class="eyebrow">Recommendations &amp; Ethical Considerations</p>
+      <h2>Who this affects &mdash; and where it could go wrong</h2>
+      <div class="callout-grid">
+        <div class="callout">
+          <h3>Not a diagnostic tool</h3>
+          <p>The app opens with that warning. It is for education and research, and a prediction should never replace evaluation by a qualified mental health professional. The target is also a survey-reported diagnosis, not a clinical assessment.</p>
+        </div>
+        <div class="callout">
+          <h3>Bias audit first</h3>
+          <p>Before any real-world use, the model needs a formal bias audit broken out by race, sex and poverty level, so it doesn&rsquo;t flag some groups more than others for reasons unrelated to need.</p>
+        </div>
+        <div class="callout">
+          <h3>Privacy and security</h3>
+          <p>Student-level data would require a secure, HIPAA-compliant host with role-based access, not a laptop. The training data here is a public survey, so no individual is exposed.</p>
+        </div>
+        <div class="callout">
+          <h3>Keep it current</h3>
+          <p>Retrain on each new annual NSCH release and run calibration checks so predicted probabilities keep matching observed rates, and add instance-level SHAP explanations so a counselor can see why.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="proj-section tone-b">
+    <div class="wrap reveal">
+      <p class="eyebrow">Conclusion</p>
+      <h2>Back to the real question</h2>
+      <p class="lede" style="margin-bottom:24px">Survey data about sleep, screens, emotional well-being, bullying and health history can predict a teen&rsquo;s depression diagnosis well above chance. The harder lessons were about everything around the model: the codes hiding in the data, the imbalance hiding in the accuracy, and the care needed before anyone acts on a score.</p>
+      <div class="takeaway-banner">A working model is the start. A <em>responsible</em> one says what it can&rsquo;t do.</div>
+      <p style="margin-top:24px"><strong>What I learned:</strong> survey data needs more preprocessing than it appears to; class imbalance makes accuracy misleading and class weights trade precision for recall; and a deployed model must be tested end to end, because mine initially ignored its own inputs.</p>
+    </div>
+  </section>
+
+  <section class="proj-section tone-a" id="app">
+    <div class="wrap reveal">
+      <p class="eyebrow">The App</p>
+      <h2>Run it yourself</h2>
+      <p class="lede" style="margin-bottom:24px">The app is a single Streamlit script. You enter a teen&rsquo;s characteristics with sliders and dropdowns, click <strong>Assess Risk</strong>, and get the prediction, both class probabilities, a risk bar and the model&rsquo;s top factors. The sidebar shows test accuracy, ROC-AUC, the classification report and the confusion matrix.</p>
+      <div class="callout-grid">
+        <figure class="callout" style="margin:0">
+          <a href="Screenshots/app-form.png"><img src="Screenshots/app-form.png" alt="The Teen Depression Risk Prediction app: model performance in the sidebar and the input form" style="width:100%;border-radius:10px;display:block" loading="lazy"></a>
+          <figcaption style="margin-top:10px;color:var(--ink-soft);font-size:.85rem">The app opens on a typical teen, with test accuracy and ROC-AUC in the sidebar.</figcaption>
+        </figure>
+        <figure class="callout" style="margin:0">
+          <a href="Screenshots/app-result.png"><img src="Screenshots/app-result.png" alt="Risk assessment output showing 84.9 percent probability of a depression diagnosis and the feature importance chart" style="width:100%;border-radius:10px;display:block" loading="lazy"></a>
+          <figcaption style="margin-top:10px;color:var(--ink-soft);font-size:.85rem">Example run: a typical teen with an anxiety diagnosis set to Yes returns 84.9%, up from 23.3%.</figcaption>
+        </figure>
+      </div>
+      <div class="callout-grid">
+        <div class="callout">
+          <h3>To run it</h3>
+          <p>Install the libraries with <code>pip install streamlit scikit-learn pandas</code>, put the NSCH teen file (<code>nsch_2021_teens.csv</code>) beside the script, and start it with <code>streamlit run app_week11.py</code>.</p>
+        </div>
+        <div class="callout">
+          <h3>What testing the app caught</h3>
+          <p>The first deployed version looked up answers as &ldquo;1&rdquo; while training had encoded them as &ldquo;1.0&rdquo;, so every categorical answer silently fell back to a default and the prediction never changed. The form also offered hours and 1&ndash;4 scales where the survey stores coded values. Both are fixed in the downloadable script, and I confirmed the output now moves with the inputs.</p>
+        </div>
+        <div class="callout">
+          <h3>About the data</h3>
+          <p>The survey file isn&rsquo;t redistributed here. NSCH data is published by the U.S. Census Bureau at <a href="https://www.census.gov/programs-surveys/nsch/data/datasets.html" target="_blank" rel="noopener">census.gov/programs-surveys/nsch</a>; the script keeps the target plus the 18 features listed above.</p>
+        </div>
+      </div>
+      <div class="links" style="margin-top:26px">
+        <a href="app_week11.py" download>Download the app (app_week11.py)</a>
+        <a href="../../index.html#projects">Back to all projects</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="proj-footer">
+  <div class="wrap">
+    <a href="../../index.html#projects">&larr; Back to all projects</a>
+    <span>&copy; <span id="yr">2026</span> Hali Sarah Parsons. Data Science, Bellevue University.</span>
+  </div>
+</footer>
+
+<script>
+  /* Title: Project page interactions. Author: Hali Sarah Parsons. Modified By: Claude.
+     Why this mirrors the other project pages: same .reveal/.js convention. */
+  (function () {
+    document.documentElement.classList.add('js');
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function revealIn(el) { el.classList.add('in'); }
+    var items = document.querySelectorAll('.reveal');
+    if (reduce || !('IntersectionObserver' in window)) {
+      items.forEach(revealIn);
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { revealIn(e.target); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.1 });
+      items.forEach(function (el) { io.observe(el); });
+    }
+  })();
+</script>
+</body>
+</html>

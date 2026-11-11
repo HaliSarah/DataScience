@@ -29,6 +29,7 @@
     <a class="brand" href="#top">HALI <span>SARAH</span> PARSONS</a>
     <ul>
       <li><a href="#about">About</a></li>
+      <li><a href="#approach">Approach</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#coursework">Coursework</a></li>
@@ -81,7 +82,7 @@
       <div>
         <p class="eyebrow">About</p>
         <h2>From messy data to a clear next step.</h2>
-        <p>I'm a data science graduate who likes turning messy data into insights businesses can act on. My coursework covered Python data wrangling and visualization, NLP (custom NER, sentiment analysis, deep learning embeddings), statistics, and business intelligence design.</p>
+        <p>I'm a data science graduate who likes turning messy data into insights businesses can act on. My coursework covered Python data wrangling and visualization, NLP (custom NER, sentiment analysis, deep learning embeddings), statistics, and business intelligence design. I&rsquo;ve also taken a model from raw survey data all the way to a deployed Streamlit app.</p>
         <p>I also have HTML, graphic art and automation skills, so I'm comfortable owning a project from idea to completion. I'm looking for a data science role to bring business solutions to the table.</p>
       </div>
       <aside class="facts" aria-label="Quick facts">
@@ -92,6 +93,121 @@
           <div><dt>Looking for</dt><dd>Data science roles</dd></div>
         </dl>
       </aside>
+    </div>
+  </section>
+
+  <section id="approach">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">Approach</p>
+        <h2>How I work through a data problem</h2>
+        <p class="lede">Every project starts with a business question, and the answer to each choice after it depends on what is being predicted. This is the map I follow, and where my projects sit on it.</p>
+      </div>
+
+      <div class="ap-start reveal"><span>Start</span>Define the business question</div>
+
+      <ol class="ap-steps">
+
+        <li class="ap-step reveal">
+          <div class="ap-num">1</div>
+          <div class="ap-body">
+            <h3>Name the target</h3>
+            <p>What is being predicted decides almost everything that follows.</p>
+            <div class="ap-branches three">
+              <div class="ap-branch c-teal"><b>Classification</b><span>A category, like yes / no</span></div>
+              <div class="ap-branch c-purple"><b>Regression</b><span>A continuous number</span></div>
+              <div class="ap-branch c-blue"><b>Time series</b><span>Forecasting future dates</span></div>
+            </div>
+          </div>
+        </li>
+
+        <li class="ap-step reveal">
+          <div class="ap-num">2</div>
+          <div class="ap-body">
+            <h3>Prepare and clean</h3>
+            <p>Handle missing values, structure the features, and keep a log of every cleaning decision so each one can be traced and reversed. Anything learned from the data, like a fill value, is learned from the training set only.</p>
+          </div>
+        </li>
+
+        <li class="ap-step reveal">
+          <div class="ap-num">3</div>
+          <div class="ap-body">
+            <h3>Split the data</h3>
+            <p>The split has to match how the model will be used.</p>
+            <div class="ap-branches">
+              <div class="ap-branch c-teal"><small>Classes balanced</small><b>Random split</b></div>
+              <div class="ap-branch c-teal"><small>Class is rare</small><b>Stratified split</b><span>Same class mix on both sides</span></div>
+              <div class="ap-branch c-purple"><small>Regression</small><b>Random 80 / 20</b></div>
+              <div class="ap-branch c-blue"><small>Time series</small><b>Chronological split</b><span>Train on the past, test on the future</span></div>
+            </div>
+            <div class="ap-rule"><b>The iron rule:</b> fit scalers and other transforms on the training set only, then apply them to both sets. Otherwise test data leaks into training and the score is inflated.</div>
+          </div>
+        </li>
+
+        <li class="ap-step reveal">
+          <div class="ap-num">4</div>
+          <div class="ap-body">
+            <h3>Choose the model</h3>
+            <p>Start with a simple baseline, then match the model to the constraints.</p>
+            <div class="ap-branches three">
+              <div class="ap-branch"><small>Must explain its reasoning</small><b>Interpretable models</b><span>Logistic regression, decision trees</span></div>
+              <div class="ap-branch"><small>Accuracy first, a black box is fine</small><b>Gradient boosting and ensembles</b><span>Random forest, XGBoost</span></div>
+              <div class="ap-branch"><small>Little data</small><b>Keep it simple</b><span>Complex models overfit small samples</span></div>
+            </div>
+          </div>
+        </li>
+
+        <li class="ap-step reveal">
+          <div class="ap-num">5</div>
+          <div class="ap-body">
+            <h3>Evaluate with the right grade</h3>
+            <p>Compare against the baseline, and pick the metric that fits the problem.</p>
+            <div class="ap-branches">
+              <div class="ap-branch c-teal"><small>Balanced classes</small><b>Accuracy, ROC-AUC</b></div>
+              <div class="ap-branch c-teal"><small>Rare class</small><b>PR-AUC, recall, F1</b><span>Accuracy alone is misleading</span></div>
+              <div class="ap-branch c-purple"><small>Regression</small><b>MAE, RMSE, R&sup2;</b></div>
+              <div class="ap-branch c-blue"><small>Time series</small><b>MAE, RMSE</b><span>Plus a look at peak periods</span></div>
+            </div>
+          </div>
+        </li>
+
+        <li class="ap-step reveal">
+          <div class="ap-num">6</div>
+          <div class="ap-body">
+            <h3>Deploy and monitor</h3>
+            <p>A model is only useful if people can use it, and only trustworthy if someone keeps watching it.</p>
+            <div class="ap-branches">
+              <div class="ap-branch"><small>Normal variation</small><b>Keep watching</b></div>
+              <div class="ap-branch"><small>Predictable seasonal spike</small><b>Expected, no action</b></div>
+              <div class="ap-branch"><small>Performance drift</small><b>Retrain</b></div>
+              <div class="ap-branch"><small>Testing a live change</small><b>A/B test</b><span>Against a significance threshold set up front</span></div>
+            </div>
+            <div class="ap-rule alt"><b>Throughout:</b> state the limits, check for bias, and say plainly what the headline number hides.</div>
+          </div>
+        </li>
+
+      </ol>
+
+      <div class="reveal">
+        <p class="eyebrow" style="margin-top:56px">Where my projects sit</p>
+        <div class="ap-projects">
+          <a class="ap-proj" href="Content/Project1/">
+            <div class="tags"><span class="tag">Project 1</span></div>
+            <h3>Storm damage</h3>
+            <p><b>Classification</b>, rare class, split grouped by storm episode, scored with PR-AUC.</p>
+          </a>
+          <a class="ap-proj" href="Content/Project2/">
+            <div class="tags"><span class="tag">Project 2</span></div>
+            <h3>ERCOT electricity demand</h3>
+            <p><b>Time series</b>, chronological holdout, MAE against a seasonal baseline, with a peak-hour check.</p>
+          </a>
+          <a class="ap-proj" href="Content/TeenDepression/">
+            <div class="tags"><span class="tag purple">DSC 355</span></div>
+            <h3>Teen depression app</h3>
+            <p><b>Classification</b>, rare class, stratified split, ROC-AUC and recall, deployed in Streamlit.</p>
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -141,6 +257,20 @@
           <div class="links"><a href="Content/Project3/">View wireframe &rarr;</a></div>
         </article>
 
+        <article class="project-card featured">
+          <div class="feat-copy">
+            <div class="tags"><span class="badge live">Live</span><span class="tag">DSC 355 &middot; Milestone 5</span><span class="tag purple">Deployed app</span></div>
+            <h3>Predicting Teen Depression Diagnosis, and Deploying the Model</h3>
+            <p>A Random Forest trained on 15,787 teens from the 2021 National Survey of Children&rsquo;s Health, with class-imbalance handling, an honest read on what the accuracy hides, and a Streamlit app anyone can use. It covers the full lifecycle, from data cleaning to deployment.</p>
+            <div class="links"><a href="Content/TeenDepression/">View case study &rarr;</a><a href="Content/TeenDepression/#app">Run the app</a></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><b>15,787</b><span>teens analyzed</span></div>
+            <div class="stat"><b>0.853</b><span>ROC-AUC, Random Forest</span></div>
+            <div class="stat"><b>Streamlit</b><span>deployed app</span></div>
+          </div>
+        </article>
+
       </div>
     </div>
 
@@ -154,7 +284,7 @@
       </div>
       <div class="skill-grid reveal">
         <div class="skill-card"><h3>Programming</h3><ul><li>Python</li><li>SQL</li><li>R / R Markdown</li><li>pandas</li><li>NumPy</li></ul></div>
-        <div class="skill-card"><h3>Analysis &amp; ML</h3><ul><li>Statistics</li><li>Regression</li><li>Feature engineering</li><li>Logistic Regression</li><li>Random Forest</li></ul></div>
+        <div class="skill-card"><h3>Analysis &amp; ML</h3><ul><li>Statistics</li><li>Regression</li><li>Feature engineering</li><li>Logistic Regression</li><li>Random Forest</li><li>Class-imbalance handling</li><li>Model evaluation (ROC-AUC)</li><li>Streamlit deployment</li></ul></div>
         <div class="skill-card"><h3>NLP</h3><ul><li>Custom NER</li><li>Sentiment analysis</li><li>TF-IDF</li><li>Deep learning embeddings</li></ul></div>
         <div class="skill-card"><h3>Data Visualization</h3><ul><li>matplotlib</li><li>seaborn</li><li>Data storytelling</li><li>Dashboards</li></ul></div>
         <div class="skill-card"><h3>Business Intelligence</h3><ul><li>BI requirements</li><li>Business justification</li><li>Data architecture &amp; ETL design</li></ul></div>
@@ -200,6 +330,15 @@
           <h3>Probability &amp; Entropy</h3>
           <p>Bayes&rsquo; theorem on a manufacturing probability tree, plus a custom Shannon entropy function compared across distributions.</p>
           <div class="links"><a href="Content/Coursework/Bayes_Entropy.html">Notebook</a></div>
+        </article>
+
+        <article class="more-card wide reveal">
+          <div>
+            <h3>Big Data &amp; Machine Learning Pipeline (DSC 400)</h3>
+            <p>An end-to-end pipeline on a synthetic data science workforce dataset: storage, wrangling, visualization, statistics, machine learning, deep learning and NLP in one notebook. The results are modest, and the write-up says so plainly.</p>
+            <div class="tags" style="margin-top:12px"><span class="tag">TinyDB</span><span class="tag">pandas</span><span class="tag">Plotly</span><span class="tag">statsmodels</span><span class="tag">scikit-learn</span><span class="tag">Keras</span><span class="tag">NLTK</span></div>
+          </div>
+          <div class="links"><a href="Content/Coursework/DSC400_Pipeline.html">Notebook</a></div>
         </article>
       </div>
     </div>
