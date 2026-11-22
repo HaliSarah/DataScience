@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <!--
-  Title:       Data Science Portfolio - Project 3 Wireframe
+  Title:       Data Science Portfolio - Project 3 Case Study
   Author:      Hali Sarah Parsons
-  Date:        October 8, 2026
+  Date:        November 21, 2026
   Modified By: Claude
-  Description: Wireframe placeholder for Project 3 (DSC 450, Weeks 9-11):
-               Recycling Contamination Risk Predictor. This satisfies
-               Portfolio Milestone 1's "wireframe of all 4 pages" requirement --
-               same section order and layout as the real Project 1 page, filled
-               with placeholder copy instead of final content. Replace each
-               [bracketed] block with real material as the sprint produces it;
-               the dashed boxes and "In progress" badge are meant to come out
-               once this page is finished, the same way Project 1's did.
-               Saved as index.html so it serves as the landing page at
-               ds.iqproductionz.com/Portfolio/Content/Project3/.
+  Description: Full case-study page for Project 3 (DSC 450):
+               Community Characteristics and Recycling Performance in NYC.
+               Replaces the wireframe; same section order and styles as the
+               Project 1 and Project 2 pages. Saved as index.html so it serves
+               as the landing page at ds.iqproductionz.com/Portfolio/Content/Project3/.
+               Numbers are transcribed from the team's final presentation and
+               re-checked against the EDA and Modeling notebook outputs, then
+               drawn as plain HTML bars, the same approach Projects 1 and 2 use.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Project 3: Recycling Contamination Risk Predictor | Hali Sarah Parsons</title>
-<meta name="description" content="DSC 450 Project 3 (in progress): predicting contamination risk in municipal recycling streams from EPA MSW data.">
+<title>Project 3: Community Characteristics and Recycling Performance | Hali Sarah Parsons</title>
+<meta name="description" content="DSC 450 Project 3 case study: what community characteristics are associated with dry recycling collection share across NYC's 59 community districts, and how well can it be predicted and forecast.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -48,105 +46,255 @@
 <header class="proj-hero">
   <div class="wrap reveal">
     <div class="tags">
-      <span class="badge progress">In progress</span>
+      <span class="badge live">Live</span>
       <span class="tag">Project 3</span>
       <span class="tag purple">Group project &middot; DSC 450</span>
-      <span class="tag">My role: Data Scientist</span>
+      <span class="tag">My role: Data Scientist (modeling)</span>
     </div>
-    <h1>Recycling Contamination Risk Predictor</h1>
-    <p class="lede">[One or two sentences: the business problem, why it matters, and what the team is testing.] Full case study goes live at the end of Week 11.</p>
+    <h1>Community Characteristics and NYC Recycling Performance</h1>
+    <p class="lede">New York City&rsquo;s 59 community districts send very different shares of their waste to dry recycling. This project asks what community characteristics line up with those differences, whether they can flag the districts most in need of attention, and how well next year&rsquo;s share can be forecast.</p>
     <ul class="meta">
-      <li class="chip"><b>Week 11</b> due date</li>
-      <li class="chip">EPA municipal solid waste data</li>
-      <li class="chip">epa.gov</li>
+      <li class="chip"><b>59</b> community districts</li>
+      <li class="chip"><b>43%</b> less error with income alone</li>
+      <li class="chip">DSNY tonnage, <b>2005&ndash;2026</b></li>
     </ul>
+    <div class="cta">
+      <a class="btn primary" href="#presentation">See the presentation</a>
+      <a class="btn ghost" href="#resources">Code &amp; notebooks</a>
+    </div>
   </div>
 </header>
 
 <main id="main">
 
-  <div class="wrap">
-    <div class="wire-note reveal">This page is a wireframe for Portfolio Milestone 1 &mdash; it mirrors Project 1's layout so the final write-up can drop straight in once Project 3's sprint (Weeks 9&ndash;11) is finished.</div>
-  </div>
-
   <section class="proj-section tone-a">
-    <div class="wrap reveal">
-      <p class="eyebrow">Business Problem</p>
-      <h2>[Section title: the problem in plain language]</h2>
-      <div class="placeholder" style="min-height:160px">
-        <h3>[Business problem / hypothesis]</h3>
-        <p>[Why recycling contamination matters, and what question this project answers.]</p>
+    <div class="wrap split reveal">
+      <div>
+        <p class="eyebrow">Business Problem</p>
+        <h2>Citywide averages hide neighborhood differences</h2>
+        <p>The Department of Sanitation (DSNY) collects refuse and recyclables in every community district, but the share that is dry recycling (paper plus metal, glass and plastic) swings from 5.1% in Bronx CD 2 to 28.4% in Brooklyn CD 6. A citywide figure of 16.9% hides all of that.</p>
+        <p>A lower share doesn&rsquo;t automatically mean residents recycle less. Refuse volume, housing, composting participation and collection practices all move the percentage. DSNY needs evidence that helps decide where to look and where to do outreach, without unfairly labeling communities.</p>
+        <p style="margin-top:22px"><strong>Four questions:</strong> (1) How does share vary across districts and boroughs? (2) Which community characteristics are associated with a lower share? (3) Can those characteristics, or history, flag the highest-risk districts? (4) How accurately can monthly share be forecast a year ahead?</p>
       </div>
+      <aside class="facts" aria-label="Project facts">
+        <dl>
+          <div><dt>Data sources</dt><dd>DSNY monthly tonnage; NYC Planning ACS income; limited-English-proficiency indicators; NYU Furman Center housing data</dd></div>
+          <div><dt>Target</dt><dd>Dry share (%) = 100 &times; (paper + MGP) &divide; (refuse + paper + MGP)</dd></div>
+          <div><dt>District comparison</dt><dd>2025, 59 districts</dd></div>
+          <div><dt>Forecast data</dt><dd>15,458 district-months, Jan 2005 &ndash; Oct 2026</dd></div>
+          <div><dt>Test window</dt><dd>January 2025 &ndash; October 2026</dd></div>
+        </dl>
+      </aside>
     </div>
   </section>
 
   <section class="proj-section tone-b">
     <div class="wrap reveal">
       <p class="eyebrow">Methods</p>
-      <h2>[Section title: data &amp; approach]</h2>
-      <div class="stats" style="grid-template-columns:repeat(4,1fr);margin-top:28px">
-        <div class="stat"><b>[ ]</b><span>[records analyzed]</span></div>
-        <div class="stat"><b>[ ]</b><span>[features / predictors]</span></div>
-        <div class="stat"><b>[ ]</b><span>[target variable]</span></div>
-        <div class="stat"><b>[ ]</b><span>[model(s) used]</span></div>
+      <h2>From city tonnage to features and models</h2>
+      <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-top:28px">
+        <div class="stat"><b>59</b><span>districts, one row each, for the 2025 comparison</span></div>
+        <div class="stat"><b>262</b><span>unbroken months per district, 15,458 rows in all</span></div>
+        <div class="stat"><b>5</b><span>community features: income, language, three housing measures</span></div>
+        <div class="stat"><b>4</b><span>research questions, each scored against a baseline</span></div>
       </div>
-      <div class="placeholder" style="min-height:120px;margin-top:26px">
-        <p>[Data source, cleaning steps, feature engineering, train/test split approach.]</p>
+      <div class="callout-grid" style="margin-top:28px">
+        <div class="callout">
+          <h3>My part: modeling</h3>
+          <p>I engineered the district features and built the models for questions 2 to 4. With only 59 districts, I scored every model with repeated cross-validation (tuning inside each fold so no district graded itself), and compared each against a simple baseline. For forecasting I used a chronological split, training on 2005&ndash;2023, tuning on 2024 and testing on 2025 onward, and added a Temporal Fusion Transformer after instructor feedback.</p>
+        </div>
+        <div class="callout">
+          <h3>Decisions worth noting</h3>
+          <p><strong>Income source:</strong> the Planning ACS income was chosen on data quality before any model scores were seen, and the other source was kept as a sensitivity check. <strong>No leakage:</strong> refuse, paper and MGP tonnage make up the target, so none became a feature. <strong>Date-aware lags:</strong> a teammate caught that shifting by row position pairs the wrong months when records are missing, so lags are matched on calendar date.</p>
+        </div>
+      </div>
+      <p style="margin-top:26px"><strong>Models:</strong> an average-share baseline, income-only and all-feature linear regression, ridge and random forest for question 2; last year&rsquo;s lowest districts, logistic regression and random forest for question 3; and a seasonal-naive baseline against ridge, gradient boosting (with and without district features), a Temporal Fusion Transformer and an ensemble for question 4.</p>
+    </div>
+  </section>
+
+  <section class="proj-section tone-a">
+    <div class="wrap reveal">
+      <p class="eyebrow">Geography</p>
+      <h2>The biggest gaps are between districts, not boroughs</h2>
+      <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-top:28px">
+        <div class="stat"><b>5.1%</b><span>lowest share, Bronx CD 2</span></div>
+        <div class="stat"><b>28.4%</b><span>highest share, Brooklyn CD 6</span></div>
+        <div class="stat"><b>16.9%</b><span>citywide share in 2025</span></div>
+        <div class="stat"><b>19.8 vs 6.4</b><span>points: Brooklyn&rsquo;s district spread vs. gap between borough averages</span></div>
+      </div>
+      <p style="margin-top:26px">Borough shares were 13.1% in the Bronx, 15.5% in Brooklyn, 19.0% in Queens, 19.1% in Manhattan and 19.5% on Staten Island, computed from summed tonnage rather than averaged percentages. Outreach planned by district would reach the problem better than a borough-wide campaign.</p>
+    </div>
+  </section>
+
+  <section class="proj-section tone-b">
+    <div class="wrap split reveal">
+      <div class="chart-card chart" role="group" aria-label="Cross-validated error predicting a district's 2025 share, in percentage points: average baseline 4.26; income only 2.43; all traits linear 2.55; ridge 2.57; random forest 2.71">
+        <h4>Income alone beat every bigger model</h4>
+        <small>Average miss per district in cross-validation, percentage points, lower is better</small>
+        <div class="bar-row"><span>Guess the average</span><div class="bar-track"><div class="bar c-muted" style="--w:100%">4.26</div></div></div>
+        <div class="bar-row"><span>Income only</span><div class="bar-track"><div class="bar c-teal" style="--w:57%">2.43</div></div></div>
+        <div class="bar-row"><span>All traits, linear</span><div class="bar-track"><div class="bar c-purple" style="--w:59.9%">2.55</div></div></div>
+        <div class="bar-row"><span>All traits, ridge</span><div class="bar-track"><div class="bar c-purple" style="--w:60.3%">2.57</div></div></div>
+        <div class="bar-row"><span>Random forest</span><div class="bar-track"><div class="bar c-purple" style="--w:63.6%">2.71</div></div></div>
+        <p class="takeaway"><strong>What this shows:</strong> income cut error by about <strong>43%</strong>. Adding language, housing and new-building measures made predictions slightly worse, the small-sample overfitting the course readings warn about.</p>
+      </div>
+      <div>
+        <p class="eyebrow">Results &middot; Community characteristics</p>
+        <h2>Income is the signal</h2>
+        <p>In the full regression (R&sup2; = 0.68), a district one standard deviation higher in income had about <strong>4.8 points</strong> more recycling share (95% interval 3.7 to 6.0). The other four features were uncertain once income was accounted for, and the result held with a second income source, without a possibly top-coded Manhattan district, and in the random forest&rsquo;s importance ranking.</p>
+        <p>This is an observational pattern across districts. It doesn&rsquo;t show that income causes the difference, or say anything about individual households.</p>
       </div>
     </div>
   </section>
 
   <section class="proj-section tone-a">
-    <div class="wrap split reveal">
-      <div class="chart-card chart placeholder" style="min-height:260px" aria-hidden="true">
-        <h4>[Chart: key result #1]</h4>
-        <small>[axis / units]</small>
-        <div class="bar-row"><span>[label]</span><div class="bar-track"><div class="bar c-teal" style="--w:70%">[value]</div></div></div>
-        <div class="bar-row"><span>[label]</span><div class="bar-track"><div class="bar c-purple" style="--w:45%">[value]</div></div></div>
-        <div class="bar-row"><span>[label]</span><div class="bar-track"><div class="bar c-muted" style="--w:20%">[value]</div></div></div>
+    <div class="wrap split reverse reveal">
+      <div class="chart-card chart" role="group" aria-label="Districts furthest below the share their income predicts, in percentage points: Brooklyn CD 8 minus 10.3; Manhattan CD 10 minus 6.5; Bronx CD 2 minus 5.9; Brooklyn CD 4 minus 4.5; Brooklyn CD 11 minus 4.2">
+        <h4>Some districts fall well short of their income</h4>
+        <small>Gap between actual 2025 share and the share predicted from income, in points</small>
+        <div class="bar-row"><span>Brooklyn CD 8</span><div class="bar-track"><div class="bar c-purple" style="--w:100%">&minus;10.3</div></div></div>
+        <div class="bar-row"><span>Manhattan CD 10</span><div class="bar-track"><div class="bar c-teal" style="--w:63.1%">&minus;6.5</div></div></div>
+        <div class="bar-row"><span>Bronx CD 2</span><div class="bar-track"><div class="bar c-teal" style="--w:57.3%">&minus;5.9</div></div></div>
+        <div class="bar-row"><span>Brooklyn CD 4</span><div class="bar-track"><div class="bar c-muted" style="--w:43.7%">&minus;4.5</div></div></div>
+        <div class="bar-row"><span>Brooklyn CD 11</span><div class="bar-track"><div class="bar c-muted" style="--w:40.8%">&minus;4.2</div></div></div>
+        <p class="takeaway"><strong>How to read it:</strong> each expected share comes from an income model fit on the <em>other</em> 58 districts. Manhattan CD 5 (&minus;5.7) is mostly commercial Midtown, so it was treated with caution and left off the list.</p>
       </div>
       <div>
-        <p class="eyebrow">Results</p>
-        <h2>[Section title: what the model found]</h2>
-        <p>[Model performance summary and the single most important takeaway, in plain language.]</p>
+        <p class="eyebrow">Areas for further investigation</p>
+        <h2>Beyond income, something else is going on</h2>
+        <p>A large gap means something beyond income may be holding a district&rsquo;s share down, such as building stock, collection setup or awareness. That makes these districts the best places to ask questions first.</p>
+        <p>They are leads, not verdicts. A gap is not proof of poor resident behavior, and it doesn&rsquo;t identify a cause.</p>
       </div>
     </div>
   </section>
 
   <section class="proj-section tone-b">
+    <div class="wrap split reveal">
+      <div class="chart-card chart" role="group" aria-label="How many of the 15 lowest-share districts each method found: last year's list 14; logistic regression 11; random forest 10; random chance about 4">
+        <h4>Last year&rsquo;s list found 14 of the 15 lowest districts</h4>
+        <small>Lowest-share districts found in each method&rsquo;s top 15, out of 15</small>
+        <div class="bar-row"><span>Prior-year lowest 15</span><div class="bar-track"><div class="bar c-purple" style="--w:93.3%">14</div></div></div>
+        <div class="bar-row"><span>Logistic regression</span><div class="bar-track"><div class="bar c-teal" style="--w:73.3%">11</div></div></div>
+        <div class="bar-row"><span>Random forest</span><div class="bar-track"><div class="bar c-teal" style="--w:66.7%">10</div></div></div>
+        <div class="bar-row"><span>Random chance</span><div class="bar-track-flex"><div class="bar-track"><div class="bar c-muted" style="--w:25%"></div></div><span class="val-out">&asymp;4</span></div></div>
+        <p class="takeaway"><strong>What this shows:</strong> both community-feature models beat chance by roughly a factor of three, but history beat them by a wide margin because districts&rsquo; rankings barely change from year to year.</p>
+      </div>
+      <div>
+        <p class="eyebrow">Results &middot; High-risk districts</p>
+        <h2>The best predictor was the past</h2>
+        <p>&ldquo;High risk&rdquo; meant the bottom quarter of 2025 share, 15 districts. Because DSNY would act on a short list, each method was scored on how many of the true 15 it placed in its own top 15.</p>
+        <p>The practical reading: flag districts using last year&rsquo;s ranking, then use community characteristics to help explain <em>why</em>. Where the two lists disagree is where a closer look is most worthwhile.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="proj-section tone-a">
+    <div class="wrap split reverse reveal">
+      <div class="chart-card chart" role="group" aria-label="Forecast error in percentage points. One month ahead: seasonal naive 0.95; ridge or gradient boosting 0.75. Year ahead for 2025: gradient boosting with district features 0.87; ensemble 0.89; ridge 0.90; seasonal naive 0.91; Temporal Fusion Transformer 1.01">
+        <h4>Next month is forecastable. Next year, barely.</h4>
+        <small>Mean absolute error in percentage points, lower is better</small>
+        <p class="embed-note" style="margin:14px 0 6px">One month ahead</p>
+        <div class="bar-row"><span>Seasonal naive</span><div class="bar-track"><div class="bar c-muted" style="--w:94.3%">0.95</div></div></div>
+        <div class="bar-row"><span>Ridge / gradient boosting</span><div class="bar-track"><div class="bar c-teal" style="--w:74.9%">0.75</div></div></div>
+        <p class="embed-note" style="margin:14px 0 6px">Year ahead (2025, forecast from December 2024)</p>
+        <div class="bar-row"><span>Gradient boosting + district features</span><div class="bar-track"><div class="bar c-teal" style="--w:86.9%">0.87</div></div></div>
+        <div class="bar-row"><span>Ensemble</span><div class="bar-track"><div class="bar c-purple" style="--w:88.8%">0.89</div></div></div>
+        <div class="bar-row"><span>Ridge</span><div class="bar-track"><div class="bar c-muted" style="--w:89.9%">0.90</div></div></div>
+        <div class="bar-row"><span>Seasonal naive</span><div class="bar-track"><div class="bar c-muted" style="--w:90.6%">0.91</div></div></div>
+        <div class="bar-row"><span>Temporal Fusion Transformer</span><div class="bar-track"><div class="bar c-muted" style="--w:100%">1.01</div></div></div>
+        <p class="takeaway"><strong>What this shows:</strong> one-month-ahead models cut error by about <strong>20%</strong>, but the best year-ahead model improved on the seasonal baseline by only about 4%. The Temporal Fusion Transformer was tested and not selected: it did worse than the baseline and varied between training runs.</p>
+      </div>
+      <div>
+        <p class="eyebrow">Results &middot; Forecasting</p>
+        <h2>Short-term forecasts held up; long-term ones were modest</h2>
+        <p>Adding district characteristics helped gradient boosting a little, which fits the earlier finding that those characteristics explain <em>which</em> districts are high or low far better than <em>how they will change</em>.</p>
+        <p>With only 59 short series, the more flexible network had too much room to chase noise. Reporting it honestly, as tested but not chosen, is part of the result.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="proj-section tone-b">
+    <div class="wrap reveal">
+      <p class="eyebrow">The Bigger Finding</p>
+      <h2>A citywide shift no district trait could predict</h2>
+      <p class="lede" style="margin-bottom:8px">From April 2025, actual collection shares ran about one percentage point above every forecast. Compared with the same months of 2024, the data show a change in what was being collected.</p>
+      <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-top:20px">
+        <div class="stat"><b>+158%</b><span>compost collection, Apr&ndash;Oct 2025 vs. 2024</span></div>
+        <div class="stat"><b>&minus;3.7%</b><span>refuse collection, same months</span></div>
+        <div class="stat"><b>+3&ndash;4%</b><span>paper and metal, glass and plastic, same months</span></div>
+      </div>
+      <p style="margin-top:26px">The drop in refuse alone accounts for about half of the one-point rise. A change in collection practices, such as expanded composting, may help explain the gap, but this analysis can&rsquo;t confirm it. A higher collection share also doesn&rsquo;t necessarily mean more material was recycled or recovered.</p>
+    </div>
+  </section>
+
+  <section class="proj-section tone-a">
     <div class="wrap reveal">
       <p class="eyebrow">Recommendations &amp; Ethical Considerations</p>
       <h2>Who this affects &mdash; and where it could go wrong</h2>
       <div class="callout-grid">
-        <div class="callout placeholder" style="min-height:140px">
+        <div class="callout">
           <h3>Stakeholder impact</h3>
-          <p>[Who uses this, and what's the risk if they over-rely on it?]</p>
+          <p>DSNY could use these results to decide where to investigate and do outreach. Residents are affected indirectly: a district labeled &ldquo;low recycling&rdquo; can attract blame it hasn&rsquo;t earned, especially when income, housing and collection setup are driving the number.</p>
         </div>
-        <div class="callout placeholder" style="min-height:140px">
+        <div class="callout">
           <h3>Data assumptions &amp; bias</h3>
-          <p>[What does the model assume about the data, and where could that go wrong?]</p>
+          <p>Everything is aggregated to districts, so nothing here describes individual behavior. Community indicators come from different geographic proxies and reporting periods: DSNY uses 59 districts, some sources use 55 areas, and 46 of 59 income areas only approximate district boundaries. One Manhattan income value looks top-coded.</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="proj-section tone-a">
-    <div class="wrap reveal">
-      <p class="eyebrow">Conclusion</p>
-      <h2>[Section title: back to the business problem]</h2>
-      <div class="placeholder" style="min-height:140px">
-        <p>[Ties the result back to the original business problem, plus next steps.]</p>
+        <div class="callout">
+          <h3>Misuse risk</h3>
+          <p>Collection share is an operational indicator, not a direct measure of how much is recycled. It shouldn&rsquo;t be used to rank neighborhoods or assign blame, and the forecasts shouldn&rsquo;t be trusted through program changes the models have never seen.</p>
+        </div>
+        <div class="callout">
+          <h3>Recommendations</h3>
+          <p>Investigate districts below their income-based expectation. Use last year&rsquo;s ranking to flag persistently low districts, and pair forecasts with awareness of collection changes. Support targeted outreach and a review of local conditions, and communicate the uncertainty alongside the numbers.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="proj-section tone-b">
     <div class="wrap reveal">
-      <p class="eyebrow">Presentation &amp; Resources</p>
-      <h2>[Notebooks, write-up, recorded presentation]</h2>
-      <div class="placeholder" style="min-height:120px">
-        <p>Links to the notebook(s), PDF write-up, Milestone 3 slide deck and recording will go here, matching Project 1's layout.</p>
+      <p class="eyebrow">Conclusion</p>
+      <h2>Back to the real question</h2>
+      <p class="lede" style="margin-bottom:24px">Income explains most of the difference between districts, history is the best way to flag the lowest ones, and a year-ahead forecast is only modestly better than repeating last year. The most useful output isn&rsquo;t a ranking, it&rsquo;s a short list of places to ask better questions.</p>
+      <div class="takeaway-banner">Use the results to guide questions &mdash; <em>not</em> to assign blame.</div>
+      <p style="margin-top:24px"><strong>Limits and next steps:</strong> the analysis is observational and district-level, and its income and housing indicators are approximations of district boundaries. Next steps are to study the 2025 collection change directly as program data becomes available, and to test whether the below-income districts share building or collection conditions that outreach could address.</p>
+    </div>
+  </section>
+
+  <section class="proj-section tone-a" id="presentation">
+    <div class="wrap reveal">
+      <p class="eyebrow">Presentation</p>
+      <h2>Final team presentation</h2>
+      <p class="lede" style="margin-bottom:24px">The 13-slide deck covers the problem, the four questions, the methods, each result, and what DSNY could do with them.</p>
+
+      <!-- Slides viewer: Microsoft's free viewer fetches the .pptx itself, so the file must be
+           uploaded to this folder with exactly this name (names are case-sensitive on the
+           server) and be publicly reachable. -->
+      <div class="slides-embed" style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#13214d;margin:0 0 20px">
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https%3A%2F%2Fds.iqproductionz.com%2FPortfolio%2FContent%2FProject3%2FNYC_Recycling_Performance_Final_Presentation.pptx"
+                title="Project 3 slides"
+                style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+                loading="lazy" allowfullscreen></iframe>
       </div>
+      <p class="embed-note">If the slides don&rsquo;t load, use the download button below.</p>
+
+      <div class="media-actions">
+        <a class="btn primary" href="NYC_Recycling_Performance_Final_Presentation.pptx" download>Download the slides (.pptx)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="proj-section tone-b" id="resources">
+    <div class="wrap reveal">
+      <p class="eyebrow">Code &amp; Resources</p>
+      <h2>Notebooks and write-up</h2>
+      <div class="links" style="margin-top:20px">
+        <a href="Data/">Data, EDA &amp; feature engineering notebook</a>
+        <a href="Modeling/">Modeling &amp; evaluation notebook</a>
+        <a href="Milestone2_Report_Community_Characteristics_and_Recycling_Performance.pdf">Milestone 2 report (PDF)</a>
+      </div>
+      <p class="embed-note" style="margin-top:18px">Team: Matthew Scarpello (data wrangling), Hali Sarah Parsons (modeling), Andrea Barfield (visualization).</p>
     </div>
   </section>
 
@@ -160,7 +308,8 @@
 </footer>
 
 <script>
-  /* Title: Project page interactions. Author: Hali Sarah Parsons. Modified By: Claude. */
+  /* Title: Project page interactions. Author: Hali Sarah Parsons. Modified By: Claude.
+     Why this mirrors the home page's script: same .reveal/.js convention. */
   (function () {
     document.documentElement.classList.add('js');
     document.getElementById('yr').textContent = new Date().getFullYear();
